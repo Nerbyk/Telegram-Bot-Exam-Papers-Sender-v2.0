@@ -1,5 +1,5 @@
 # Pozor Bot v 2.0
-After one month of previous version of bot exploitation I decided to create completly new bot with an updated structure, database system and client's interface.
+After one month of [previous version of bot](https://github.com/Nerbyk/Telegram-Bot-Exam-Papers-Sender) exploitation I decided to create completly new bot with an updated structure, database system and client's interface.
 
 ## Description 
 Every foreigner arriving from the CIS to the Czech Republic must pass nostrification exams. 3 to 6 exams are assigned.
