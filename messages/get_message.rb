@@ -6,7 +6,7 @@ class GetMessageText
   attr_reader :replies_list, :case_text, :client
   def initialize(client:)
     @client = client
-    @replies_list = YAML.safe_load(File.read('./messages/msg-examples/' + client + '_messages.yaml'))
+    @replies_list = YAML.safe_load(File.read('./messages/msg-examples/' + client + '_messages.yml'))
   end
 
   def reply(case_text)
