@@ -2,7 +2,7 @@
 
 require 'telegram/bot'
 require 'dotenv'
-require 'bot_options.rb'
+require './bot_options.rb'
 require './messages/responder/responder.rb'
 require './messages/responder_buttons/responder.rb'
 
@@ -16,9 +16,9 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
     begin
       case message
       when Telegram::Bot::Types::CallbackQuery
-        ButtonResponder.new
+        # ButtonResponder.new
       else
-        MessageResponder.new
+        MessageResponder.new(role: 'admin') # TODO: class to check role of user via DB to separate access levels
       end
     rescue StandardError => e
       p e
