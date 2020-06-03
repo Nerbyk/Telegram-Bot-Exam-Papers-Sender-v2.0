@@ -1,28 +1,39 @@
 # frozen_string_literal: true
 
+require './messages/responder/receiver.rb'
+require './messages/responder/commands.rb'
+require './messages/responder/invoker.rb'
 # abstract class
 class UserRole
-  def self.excute
-    raise NotImplementedError
+  def initialize
+    @receiver = Receiver.new
+    @invoker  = Invoker.new
+  end
+
+  # common comands
+  def execute
+    case BotOptions.instance.message.text
+    when '/start' then @invoker.execute(StartCommand.new(@receiver))
+    end
   end
 end
 
 # invoker classes to command pattern
 class User < UserRole
-  def self.execute
-    p 'user'
+  def execute
+    super
   end
 end
 
 class Admin < UserRole
-  def self.execute
-    p 'admin'
+  def execute
+    super
   end
 end
 
 class Developer < UserRole
-  def self.execute
-    p 'developer'
+  def execute
+    super
   end
 end
 
@@ -33,7 +44,7 @@ class GetUserCommand < Struct.new(:role)
 
   def call
     @role = role
-    find_role_commands.execute
+    find_role_commands.new.execute
   end
 
   def find_role_commands
