@@ -3,6 +3,7 @@
 require './messages/responder/receiver.rb'
 require './messages/responder/commands.rb'
 require './messages/responder/invoker.rb'
+require './config_vars/expected_commands.rb'
 # semi-abstract class
 class UserRole
   def initialize
@@ -13,7 +14,7 @@ class UserRole
   # common comands
   def execute
     case BotOptions.instance.message.text
-    when '/start' then @invoker.execute(StartCommand.new(@receiver))
+    when BotCommands::START then @invoker.execute(StartCommand.new(@receiver))
     end
   end
 end
@@ -28,6 +29,9 @@ end
 class Admin < UserRole
   def execute
     super
+    case BotOptions.instance.message.text
+    when BotCommands::MANAGE_ADMINS then @invoker.execute(ManageAdminsCommand.new(@receiver))
+    end
   end
 end
 

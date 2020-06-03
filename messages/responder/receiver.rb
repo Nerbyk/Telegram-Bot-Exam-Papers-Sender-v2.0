@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
+require './messages/inline_markup.rb'
+
 class Receiver
   # Admin commands
   def admin_start
     BotOptions.instance.send_message(text: 'greeting_menu')
+  end
+
+  def admin_manage_admins
+    inline_buttons = MakeInlineMarkup.new(['Добавить админа', 'Add Admin'], ['Удалить админа', 'Delete Admin']).get_markup
+    BotOptions.instance.send_message(text: 'manage_admins', markup: inline_buttons)
   end
 
   # User commands
