@@ -20,16 +20,13 @@ class UserConfigDb
   private
 
   def check_existance
-    p "message from id in check_existance: #{BotOptions.instance.message.from.id}"
     dataset.each do |row|
-      p " row role #{row[:role]}"
       return row[:role] if row[:user_id] == BotOptions.instance.message.from.id.to_s
     end
     false
   end
 
   def initialize_user
-    p "initialuze_user called by #{BotOptions.instance.message.from.id}"
     dataset.insert(user_id: BotOptions.instance.message.from.id.to_s,
                    user_name: BotOptions.instance.message.from.username,
                    role: default_role,
