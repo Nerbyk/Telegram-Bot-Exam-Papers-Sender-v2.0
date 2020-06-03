@@ -21,8 +21,8 @@ class MakeInlineMarkup
     Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
   end
 
-  def get_board
-    Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: @inline_items)
+  def get_board(one_time_keyboard: false)
+    Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: @inline_items, one_time_keyboard: one_time_keyboard)
   end
 
   def delete_board
