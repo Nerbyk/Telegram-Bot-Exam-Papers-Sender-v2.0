@@ -3,7 +3,7 @@
 class Receiver
   # Admin commands
   def admin_start
-    p 'started by admin'
+    BotOptions.instance.send_message(text: 'greeting_menu')
   end
 
   # User commands
