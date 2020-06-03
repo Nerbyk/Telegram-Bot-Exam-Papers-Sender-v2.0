@@ -16,6 +16,23 @@ class ButtonReceiver
   end
 
   def delete_admin
-    p 'delete pushed'
+    array_wtih_admins = UserConfigDb.instance.get_admins
+    display_string = ' '
+    array_for_inline = []
+    array_wtih_admins.each do |hash|
+      display_string += "\n\n user id = #{hash[:user_id]} | #{hash[:user_name]}"
+      array_for_inline << [hash[:user_id]]
+    end
+    p(array_for_inline)
+    markup = MakeInlineMarkup.new(*array_for_inline).get_board(one_time_keyboard: true)
+    BotOptions.instance.send_message(text: 'manage_admins_delete', markup: markup, additional_text: display_string)
+    to_delete = BotOptions.instance.get_single_input
+    if array_for_inline.flatten.include?(to_delete)
+      BotOptions.instance.send_message(text: 'manage_admins_error') unless UserConfigDb.instance.delete_admin(to_delete)
+      BotOptions.instance.send_message(text: 'manage_admins_deleted')
+      Invoker.new.execute(StartCommand.new(Receiver.new))
+    else
+      BotOptions.instance.send_message(text: 'manage_admins_error')
+    end
   end
 end
