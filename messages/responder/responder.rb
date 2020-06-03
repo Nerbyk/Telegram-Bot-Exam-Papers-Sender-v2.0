@@ -14,7 +14,7 @@ class MessageResponder
   private
 
   def execute
-    GetUserCommand.call(role: role)
+    GetUserCommand.new(role: role).call
   end
 
   attr_reader :role, :message_text

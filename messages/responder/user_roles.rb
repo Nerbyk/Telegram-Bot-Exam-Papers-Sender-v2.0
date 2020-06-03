@@ -26,8 +26,12 @@ class Developer < UserRole
   end
 end
 
-class GetUserCommand
-  def call(role:)
+class GetUserCommand < Struct.new(:role)
+  def initialize(role:)
+    @role = role
+  end
+
+  def call
     @role = role
     find_role_commands.execute
   end
