@@ -3,16 +3,17 @@
 require 'singleton'
 
 class BotOptions
-  attr_accessor :bot, :message, :role
+  attr_accessor :bot, :message, :role, :my_text
   include Singleton
   def initialize
     @bot = bot
     @message = message
     @role = role
+    @my_text = my_text
   end
 
   def send_message(text:, markup: nil)
-    bot.api.send_message(chat_id: message.from.id, text: text, reply_markup: markup)
+    bot.api.send_message(chat_id: message.from.id, text: my_text.reply(text), reply_markup: markup)
   end
 
   def delete_markup
