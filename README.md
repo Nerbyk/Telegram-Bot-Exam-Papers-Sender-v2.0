@@ -36,7 +36,7 @@ So this bot sends the necessary documents with examinations papers based on the 
     - /start - to start bot (can be used once)
     - /status - check status of a request
 
-## Admin Panel
+## Moderator Panel
 - Managing users requests
     - Accept
     - Deny + message with reason
@@ -45,8 +45,16 @@ So this bot sends the necessary documents with examinations papers based on the 
     - /start - call main menu 
     - /inspect - start checking users requests
     - /status - get a number of uninspected requests 
-- Commands extension for 'Chief Admin'
+- Commands extension for 'Admin'
     - /manage_admins - manage a list of admins
+        - add new admin 
+        - delete admin 
+    - /update_documents - set new documents which would be send to users 
+    - /set_notification number - set a minimum number of uninspected requests  to get a notification message 
+    - /manage_links - change VK link and telegram channel link to check users membership
+## Admin Panel
+- Commands(the same, as moderators have +)
+     - /manage_admins - manage a list of admins
         - add new admin 
         - delete admin 
     - /update_documents - set new documents which would be send to users 
