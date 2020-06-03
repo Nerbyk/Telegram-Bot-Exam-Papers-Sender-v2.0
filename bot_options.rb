@@ -3,11 +3,12 @@
 require 'singleton'
 
 class BotOptions
-  attr_accessor :bot, :message
+  attr_accessor :bot, :message, :role
   include Singleton
   def initialize
     @bot = bot
     @message = message
+    @role = role
   end
 
   def send_message(text:, markup: nil)
