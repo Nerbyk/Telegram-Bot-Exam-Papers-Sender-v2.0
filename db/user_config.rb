@@ -20,11 +20,24 @@ class UserConfigDb
   def add_admin(input:)
     new_role = Roles::MODERATOR + '_' + input.last
     if check_existance(user_id: input.first)
-      dataset.filter(user_id: input.first).update[role: new_role]
+      dataset.where(user_id: input.first).update(role: new_role)
     else
-      p 'false'
       initialize_user(user_id: input.first, user_name: input.last, role: new_role)
     end
+  end
+
+  def get_admins
+    return_array = []
+    dataset.each do |row|
+      return_array << row if row[:role].include?(Roles::MODERATOR)
+    end
+    return_array
+  end
+
+  def delete_admin(user_id)
+    dataset.where(user_id: user_id).update(role: Roles::USER)
+  rescue StandardError
+    false
   end
 
   private
