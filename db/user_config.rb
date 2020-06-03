@@ -10,26 +10,37 @@ class UserConfigDb
     @db           = Sequel.sqlite('./db/user_config.db')
     @table        = :user_config
     @dataset      = create
-    @default_role = 'User'
+    @default_role = Roles::USER
   end
 
   def get_role
     check_existance || initialize_user
   end
 
-  private
-
-  def check_existance
-    dataset.each do |row|
-      return row[:role] if row[:user_id] == BotOptions.instance.message.from.id.to_s
+  def add_admin(input:)
+    new_role = Roles::MODERATOR + '_' + input.last
+    if check_existance(user_id: input.first)
+      dataset.filter(user_id: input.first).update[role: new_role]
+    else
+      p 'false'
+      initialize_user(user_id: input.first, user_name: input.last, role: new_role)
     end
-    false
   end
 
-  def initialize_user
-    dataset.insert(user_id: BotOptions.instance.message.from.id.to_s,
-                   user_name: BotOptions.instance.message.from.username,
-                   role: default_role,
+  private
+
+  def check_existance(user_id: BotOptions.instance.message.from.id.to_s)
+    check = dataset.where(user_id: user_id).first[:role]
+  rescue NoMethodError # if another type of error -> error in main exeception handling
+    false
+  else
+    check
+  end
+
+  def initialize_user(role: default_role, user_id: BotOptions.instance.message.from.id.to_s, user_name: BotOptions.instance.message.from.username)
+    dataset.insert(user_id: user_id,
+                   user_name: user_name,
+                   role: role,
                    status: 'Registered')
     default_role
   end
