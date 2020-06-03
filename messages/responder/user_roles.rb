@@ -3,7 +3,7 @@
 require './messages/responder/receiver.rb'
 require './messages/responder/commands.rb'
 require './messages/responder/invoker.rb'
-# abstract class
+# semi-abstract class
 class UserRole
   def initialize
     @receiver = Receiver.new
