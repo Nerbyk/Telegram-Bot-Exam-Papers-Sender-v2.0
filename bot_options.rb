@@ -12,14 +12,14 @@ class BotOptions
     @my_text = my_text
   end
 
-  def send_message(text:, markup: nil)
+  def send_message(text:, markup: nil, additional_text: '.')
     bot.api.send_message(chat_id: message.from.id,
-                         text: my_text.reply(text),
+                         text: my_text.reply(text) + additional_text,
                          reply_markup: markup)
   end
 
   def delete_keyboard
-    bot.api.reply_keyboard_remove(remove_keyboard: true)
+    Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
   end
 
   def delete_markup
@@ -27,13 +27,13 @@ class BotOptions
                                       message_id: message.message.message_id)
   end
 
-  def edit_message(text:, markup: nil)
+  def edit_message(text:, markup: nil, additional_text: '.')
     bot.api.edit_message_text(chat_id: message.from.id,
                               message_id: message.message.message_id,
-                              text: my_text.reply(text),
+                              text: my_text.reply(text) + additional_text,
                               reply_markup: markup)
   rescue StandardError
-    send_message(text: 'admin_exepction_error')
+    send_message(text: 'admin_exception_error')
   end
 
   def get_single_input
