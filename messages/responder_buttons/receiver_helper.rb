@@ -15,9 +15,16 @@ class ReceiverHelper
   end
 
   def self.check_add_admin_input(input)
-    false if input.length != 2
-    false unless input.first.to_i.is_a? Integer
-    false unless input.last.to_i.is_a? String
+    return false if input.length != 2
+    return false unless is_number?(input.first)
+    return false if is_number?(input.last)
+
     true
+  end
+
+  def self.is_number?(string)
+    true if Float(string)
+  rescue StandardError
+    false
   end
 end
