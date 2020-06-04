@@ -24,3 +24,15 @@ class DeleteAdminButton < Button
     request.delete_admin
   end
 end
+
+class AddSubjectButton < Button
+  def execute
+    request.add_subject
+  end
+end
+
+class EditSubjectButton < Button
+  def execute
+    request.edit_subject
+  end
+end
