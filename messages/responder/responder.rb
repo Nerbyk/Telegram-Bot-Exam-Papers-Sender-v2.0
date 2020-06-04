@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require './messages/get_message.rb'
-require './config_vars/role_state.rb'
 require './messages/responder/user_roles.rb'
 
 class MessageResponder

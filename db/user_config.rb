@@ -10,7 +10,7 @@ class UserConfigDb
     @db           = Sequel.sqlite('./db/user_config.db')
     @table        = :user_config
     @dataset      = create
-    @default_role = Roles::USER
+    @default_role = CfgConst::Roles::USER
   end
 
   def get_role
@@ -18,7 +18,7 @@ class UserConfigDb
   end
 
   def add_admin(input:)
-    new_role = Roles::MODERATOR + '_' + input.last
+    new_role = CfgConst::Roles::MODERATOR
     if check_existance(user_id: input.first)
       dataset.where(user_id: input.first).update(role: new_role)
     else
@@ -29,13 +29,13 @@ class UserConfigDb
   def get_admins
     return_array = []
     dataset.each do |row|
-      return_array << row if row[:role].include?(Roles::MODERATOR)
+      return_array << row if row[:role].include?(CfgConst::Roles::MODERATOR)
     end
     return_array
   end
 
   def delete_admin(user_id)
-    dataset.where(user_id: user_id).update(role: Roles::USER)
+    dataset.where(user_id: user_id).update(role: CfgConst::Roles::USER)
   rescue StandardError
     false
   end
