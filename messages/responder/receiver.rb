@@ -9,8 +9,22 @@ class Receiver
   end
 
   def admin_manage_admins
-    inline_buttons = MakeInlineMarkup.new(['Добавить админа', 'Add Admin'], ['Удалить админа', 'Delete Admin']).get_markup
-    BotOptions.instance.send_message(text: 'manage_admins', markup: inline_buttons)
+    choose_option_msg(['Добавить админа', CfgConst::BotButtons::ADD_ADMIN], ['Удалить админа', CfgConst::BotButtons::DELETE_ADMIN])
+  end
+
+  def admin_update_documents
+    choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
+  end
+
+  private
+
+  def choose_option_msg(*buttons)
+    each_button = []
+    (0..buttons.length - 1).each do |i|
+      each_button << buttons[i]
+    end
+    inline_buttons = MakeInlineMarkup.new(*each_button).get_markup
+    BotOptions.instance.send_message(text: 'choose_option', markup: inline_buttons)
   end
 
   # User commands
