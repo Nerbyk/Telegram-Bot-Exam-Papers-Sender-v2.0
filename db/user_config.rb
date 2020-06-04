@@ -4,10 +4,11 @@ require 'singleton'
 require 'sequel'
 require 'sqlite3'
 
-class UserConfigDb
+require './db/abstract_db.rb'
+class UserConfigDb < Db
   include Singleton
   def initialize
-    @db           = Sequel.sqlite('./db/user_config.db')
+    super
     @table        = :user_config
     @dataset      = create
     @default_role = CfgConst::Roles::USER
