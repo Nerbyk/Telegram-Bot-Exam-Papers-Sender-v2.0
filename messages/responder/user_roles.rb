@@ -29,7 +29,8 @@ class Admin < UserRole
   def execute
     super
     case BotOptions.instance.message.text
-    when CfgConst::BotCommands::MANAGE_ADMINS then @invoker.execute(ManageAdminsCommand.new(@receiver))
+    when CfgConst::BotCommands::MANAGE_ADMINS    then @invoker.execute(ManageAdminsCommand.new(@receiver))
+    when CfgConst::BotCommands::UPDATE_DOCUMENTS then @invoker.execute(UpdateDocumentsCommand.new(@receiver))
     end
   end
 end
