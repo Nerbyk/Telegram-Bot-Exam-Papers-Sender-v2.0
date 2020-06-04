@@ -25,3 +25,9 @@ class ManageAdminsCommand < Command
     request.admin_manage_admins
   end
 end
+
+class UpdateDocumentsCommand < Command
+  def execute
+    request.admin_update_documents
+  end
+end
