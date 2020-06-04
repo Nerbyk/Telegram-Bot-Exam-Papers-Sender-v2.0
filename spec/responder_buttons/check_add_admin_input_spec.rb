@@ -16,6 +16,18 @@ describe ReceiverHelper do
           expect(ReceiverHelper.check_add_admin_input(%w[nameSurname 1234])).to eq(false)
         end
       end
+
+      context "given ['nameSurname', '1234', 'oneMoreItem']" do
+        it 'returns false' do
+          expect(ReceiverHelper.check_add_admin_input(%w[nameSurname 1234 oneMoreItem])).to eq(false)
+        end
+      end
+
+      context 'given [1234]' do
+        it 'returns false' do
+          expect(ReceiverHelper.check_add_admin_input([1234])).to eq(false)
+        end
+      end
     end
   end
 end
