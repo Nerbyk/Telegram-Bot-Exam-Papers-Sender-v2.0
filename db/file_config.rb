@@ -15,14 +15,10 @@ class FileConfigDb < Db
 
   def set_subject(subject:, message_id:)
     create_or_update = dataset.where(subject: subject)
+    p subject
     if create_or_update.update(subject: subject, message_id: message_id) != 1
       dataset.insert(subject: subject, message_id: message_id)
     end
-  end
-
-  def get_subjects
-    cols = %i[subject message_id]
-    dataset.select { cols }.collect { |h| cols.collect { |c| h[c] } }
   end
 
   private

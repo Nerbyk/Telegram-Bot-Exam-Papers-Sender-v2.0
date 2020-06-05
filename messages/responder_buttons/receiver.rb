@@ -13,19 +13,19 @@ class ButtonReceiver
       BotOptions.instance.send_message(text: 'manage_admins_error')
     else
       UserConfigDb.instance.add_admin(input: input)
-      call_menu
+      Invoker.new.execute(StartCommand.new(Receiver.new))
     end
   end
 
   def delete_admin
-    display_string, array_for_inline, markup = ReceiverHelper.display_string
+    display_string, array_for_inline, markup = ReceiverHelper.get_list_of_admins
     BotOptions.instance.delete_markup
     BotOptions.instance.send_message(text: 'manage_admins_delete', markup: markup, additional_text: display_string)
     to_delete = BotOptions.instance.get_single_input.text
     if array_for_inline.flatten.include?(to_delete)
       BotOptions.instance.send_message(text: 'manage_admins_error') unless UserConfigDb.instance.delete_admin(to_delete)
       BotOptions.instance.send_message(text: 'manage_admins_deleted')
-      call_menu
+      Invoker.new.execute(StartCommand.new(Receiver.new))
     else
       BotOptions.instance.send_message(text: 'manage_admins_error')
     end
@@ -46,17 +46,10 @@ class ButtonReceiver
   else
     BotOptions.instance.send_message(text: 'update_document_subject_succeed')
     sleep(1)
-    call_menu
-  end
-
-  def self.edit_subject
-    subject = FileConfigDb.instance.get_subjects
-    BotOptions.instance.edit_message(text: 'update_document_edit_showlist')
-  end
-
-  private
-
-  def call_menu
     Invoker.new.execute(StartCommand.new(Receiver.new))
+  end
+
+  def edit_subject
+    p 'edit'
   end
 end

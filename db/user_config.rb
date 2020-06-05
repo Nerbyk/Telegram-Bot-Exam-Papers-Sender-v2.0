@@ -32,7 +32,6 @@ class UserConfigDb < Db
     dataset.each do |row|
       return_array << row if row[:role].include?(CfgConst::Roles::MODERATOR)
     end
-    p return_array
     return_array
   end
 
