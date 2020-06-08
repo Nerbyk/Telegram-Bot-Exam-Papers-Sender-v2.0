@@ -8,7 +8,7 @@ class ButtonReceiver
     BotOptions.instance.edit_message(text: 'manage_admins_add')
     begin
       input = BotOptions.instance.get_single_input.text.split(' ')
-      ReceiverHelper.check_add_admin_input(input) ? true : raise
+      ReceiverHelper.check_db_string(input) ? true : raise
     rescue StandardError
       BotOptions.instance.send_message(text: 'manage_admins_error')
     else
@@ -18,7 +18,8 @@ class ButtonReceiver
   end
 
   def delete_admin
-    display_string, array_for_inline, markup = ReceiverHelper.display_string
+    db_data = UserConfigDb.instance.get_admins
+    display_string, array_for_inline, markup = ReceiverHelper.display_string(db_data)
     BotOptions.instance.delete_markup
     BotOptions.instance.send_message(text: 'manage_admins_delete', markup: markup, additional_text: display_string)
     to_delete = BotOptions.instance.get_single_input.text

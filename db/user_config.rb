@@ -30,9 +30,13 @@ class UserConfigDb < Db
   def get_admins
     return_array = []
     dataset.each do |row|
-      return_array << row if row[:role].include?(CfgConst::Roles::MODERATOR)
+      next unless row[:role].include?(CfgConst::Roles::MODERATOR)
+
+      spec_data = []
+      spec_data << row[:user_id]
+      spec_data << row[:user_name]
+      return_array << spec_data
     end
-    p return_array
     return_array
   end
 
