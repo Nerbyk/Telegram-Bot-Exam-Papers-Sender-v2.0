@@ -4,16 +4,22 @@
 class ReceiverHelper
   def self.display_string(list_from_db)
     display_string = ''
-    array_for_inline = []
     list_from_db.each do |hash|
-      display_string += "\n\n user id = #{hash.first} | #{hash.last}"
-      array_for_inline << [hash.first]
+      display_string += "\n\n #{hash.first} | #{hash.last}"
     end
-    markup = MakeInlineMarkup.new(*array_for_inline).get_board
-    [display_string, list_from_db, markup]
+    [display_string, markup]
   end
 
-  def self.check_string_length(input)
+  def markup_string(list_from_db)
+    array_for_inline = []
+    list_from_db.each do |row|
+      array_for_inline << [row.first]
+    end
+    markup = MakeInlineMarkup.new(*array_for_inline).get_board
+    [markup, array_for_inline]
+  end
+
+  def self.check_db_string(input)
     return false if input.length != 2
     return false unless is_number?(input.first)
     return false if is_number?(input.last)

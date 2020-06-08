@@ -19,11 +19,13 @@ class ButtonReceiver
 
   def delete_admin
     db_data = UserConfigDb.instance.get_admins
-    display_string, array_for_inline, markup = ReceiverHelper.display_string(db_data)
+    display_string = ReceiverHelper.display_string(db_data)
+    markup, available_buttons = ReceiverHelper.markup_string(db_data)
+
     BotOptions.instance.delete_markup
     BotOptions.instance.send_message(text: 'manage_admins_delete', markup: markup, additional_text: display_string)
     to_delete = BotOptions.instance.get_single_input.text
-    if array_for_inline.flatten.include?(to_delete)
+    if available_buttons.flatten.include?(to_delete)
       BotOptions.instance.send_message(text: 'manage_admins_error') unless UserConfigDb.instance.delete_admin(to_delete)
       BotOptions.instance.send_message(text: 'manage_admins_deleted')
       call_menu
@@ -52,6 +54,7 @@ class ButtonReceiver
 
   def self.edit_subject
     subject = FileConfigDb.instance.get_subjects
+
     BotOptions.instance.edit_message(text: 'update_document_edit_showlist')
   end
 
