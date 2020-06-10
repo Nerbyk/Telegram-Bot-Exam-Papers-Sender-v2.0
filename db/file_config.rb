@@ -25,6 +25,12 @@ class FileConfigDb < Db
     dataset.select { cols }.collect { |h| cols.collect { |c| h[c] } }
   end
 
+  def delete_subject(subject)
+    dataset.where(subject: subject).delete
+  rescue StandardError
+    false
+  end
+
   private
 
   def create

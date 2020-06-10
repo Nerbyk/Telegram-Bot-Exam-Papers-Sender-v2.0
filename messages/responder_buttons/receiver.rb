@@ -22,12 +22,15 @@ class ButtonReceiver
     display_string = ReceiverHelper.display_string(db_data)
     markup, available_buttons = ReceiverHelper.markup_string(db_data)
 
-    BotOptions.instance.delete_markup
     BotOptions.instance.send_message(text: 'manage_admins_delete', markup: markup, additional_text: display_string)
     to_delete = BotOptions.instance.get_single_input.text
     if available_buttons.flatten.include?(to_delete)
-      BotOptions.instance.send_message(text: 'manage_admins_error') unless UserConfigDb.instance.delete_admin(to_delete)
-      BotOptions.instance.send_message(text: 'manage_admins_deleted')
+      unless UserConfigDb.instance.delete_admin(to_delete)
+        BotOptions.instance.send_message(text: 'manage_admins_error')
+        return
+      end
+      markup = MakeInlineMarkup.delete_board
+      BotOptions.instance.send_message(text: 'manage_admins_deleted', markup: markup)
       call_menu
     else
       BotOptions.instance.send_message(text: 'manage_admins_error')
@@ -52,10 +55,25 @@ class ButtonReceiver
     call_menu
   end
 
-  def self.edit_subject
+  def edit_subject
     subject = FileConfigDb.instance.get_subjects
-
-    BotOptions.instance.edit_message(text: 'update_document_edit_showlist')
+    markup, available_buttons = ReceiverHelper.markup_string(subject)
+    subject.map(&:reverse!)
+    display_string = ReceiverHelper.display_string(subject)
+    BotOptions.instance.send_message(text: 'update_document_edit_showlist', additional_text: display_string, markup: markup)
+    to_edit = BotOptions.instance.get_single_input.text
+    if available_buttons.flatten.include?(to_edit)
+      unless FileConfigDb.instance.delete_subject(to_edit)
+        BotOptions.instance.send_message(text: 'update_document_subject_failed')
+        return
+      end
+      markup = MakeInlineMarkup.delete_board
+      BotOptions.instance.send_message(text: 'update_document_deleted', markup: markup)
+      sleep(1)
+      call_menu
+    else
+      BotOptions.instance.send_message(text: 'update_document_subject_failed')
+    end
   end
 
   private
