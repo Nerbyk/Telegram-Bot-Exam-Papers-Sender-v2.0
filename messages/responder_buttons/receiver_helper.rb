@@ -7,10 +7,10 @@ class ReceiverHelper
     list_from_db.each do |hash|
       display_string += "\n\n #{hash.first} | #{hash.last}"
     end
-    [display_string, markup]
+    display_string
   end
 
-  def markup_string(list_from_db)
+  def self.markup_string(list_from_db)
     array_for_inline = []
     list_from_db.each do |row|
       array_for_inline << [row.first]
