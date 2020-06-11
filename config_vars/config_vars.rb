@@ -12,6 +12,7 @@ module CfgConst
     START = '/start'
     MANAGE_ADMINS = '/manage_admins'
     UPDATE_DOCUMENTS = '/update_documents'
+    UPDATE_LINK = '/change_links'
   end
 
   class Roles
