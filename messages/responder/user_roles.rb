@@ -31,6 +31,7 @@ class Admin < UserRole
     case BotOptions.instance.message.text
     when CfgConst::BotCommands::MANAGE_ADMINS    then @invoker.execute(ManageAdminsCommand.new(@receiver))
     when CfgConst::BotCommands::UPDATE_DOCUMENTS then @invoker.execute(UpdateDocumentsCommand.new(@receiver))
+    when CfgConst::BotCommands::UPDATE_LINK      then @invoker.execute(UpdateLinkCommand.new(@receiver))
     end
   end
 end

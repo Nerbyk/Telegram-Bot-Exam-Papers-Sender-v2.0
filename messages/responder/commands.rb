@@ -31,3 +31,9 @@ class UpdateDocumentsCommand < Command
     request.admin_update_documents
   end
 end
+
+class UpdateLinkCommand < Command
+  def execute
+    request.admin_update_link
+  end
+end

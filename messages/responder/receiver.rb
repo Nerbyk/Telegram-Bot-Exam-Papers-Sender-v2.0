@@ -16,6 +16,18 @@ class Receiver
     choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
   end
 
+  def admin_update_link
+    BotOptions.instance.send_message(text: 'change_link')
+    new_link = BotOptions.instance.get_single_input.text
+    if LinkConfigDb.instance.set_new_link(new_link)
+      BotOptions.instance.send_message(text: 'change_link_succeed')
+      sleep(1)
+      call_menu
+    else
+      BotOptions.instance.send_message(text: 'change_link_fail')
+    end
+  end
+
   private
 
   def choose_option_msg(*buttons)
@@ -25,6 +37,10 @@ class Receiver
     end
     inline_buttons = MakeInlineMarkup.new(*each_button).get_markup
     BotOptions.instance.send_message(text: 'choose_option', markup: inline_buttons)
+  end
+
+  def call_menu
+    Invoker.new.execute(StartCommand.new(Receiver.new))
   end
 
   # User commands
