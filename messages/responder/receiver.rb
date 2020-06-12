@@ -9,23 +9,38 @@ class Receiver
   end
 
   def admin_manage_admins
-    choose_option_msg(['Добавить админа', CfgConst::BotButtons::ADD_ADMIN], ['Удалить админа', CfgConst::BotButtons::DELETE_ADMIN])
+    ReceiverHelper.choose_option_msg(['Добавить админа', CfgConst::BotButtons::ADD_ADMIN], ['Удалить админа', CfgConst::BotButtons::DELETE_ADMIN])
   end
 
   def admin_update_documents
-    choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
+    ReceiverHelper.choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
   end
 
   def admin_update_link
-    BotOptions.instance.send_message(text: 'change_link')
+    BotOptions.instance.send_message(text: 'change_link', additional_text: CfgConst::Links.instance.return_current_links)
     new_link = BotOptions.instance.get_single_input.text
-    if LinkConfigDb.instance.set_new_link(new_link)
+    if CfgConst::Links.instance.set_new_link(new_link)
       BotOptions.instance.send_message(text: 'change_link_succeed')
       sleep(1)
       call_menu
     else
       BotOptions.instance.send_message(text: 'change_link_fail')
     end
+  end
+
+  def admin_set_alert_amount
+    BotOptions.instance.send_message(text: 'set_alert', additional_text: CfgConst::Alert.instance.amount.to_s)
+    amount = BotOptions.instance.get_single_input.text
+    if ReceiverHelper.is_number?(amount)
+      CfgConst::Alert.instance.amount = amount
+      BotOptions.instance.send_message(text: 'set_alert_succeed')
+      sleep(1)
+      call_menu
+    else
+      raise
+    end
+  rescue StandardError => e
+    BotOptions.instance.send_message(text: 'set_alert_error')
   end
 
   private
