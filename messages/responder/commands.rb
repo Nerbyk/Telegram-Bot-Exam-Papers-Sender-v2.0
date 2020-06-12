@@ -37,3 +37,9 @@ class UpdateLinkCommand < Command
     request.admin_update_link
   end
 end
+
+class SetAlertAmountCommand < Command
+  def execute
+    request.admin_set_alert_amount
+  end
+end
