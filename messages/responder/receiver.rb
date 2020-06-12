@@ -39,7 +39,8 @@ class Receiver
     else
       raise
     end
-  rescue StandardError => e
+  rescue Exception => e
+    ErrorLogDb.instance.log_error(level: '/amount_to_alert', message: BotOptions.instance.message, exception: e.class.to_s)
     BotOptions.instance.send_message(text: 'set_alert_error')
   end
 
