@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require './messages/responder_buttons/receiver_helper.rb'
-
+require './actions/form_filling.rb'
 class ButtonReceiver
   # admin buttons
   def add_admin
@@ -74,6 +74,15 @@ class ButtonReceiver
     else
       BotOptions.instance.send_message(text: 'update_document_subject_failed')
     end
+  end
+
+  # user buttons
+  def start_nostrification
+    Form.new.start
+  end
+
+  def start_advertisement
+    p 'in progress'
   end
 
   private
