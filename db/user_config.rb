@@ -18,6 +18,10 @@ class UserConfigDb < Db
     check_existance || initialize_user
   end
 
+  def get_status
+    dataset.where(user_id: BotOptions.instance.message.from.id.to_s).first[:status]
+  end
+
   def add_admin(input:)
     new_role = CfgConst::Roles::MODERATOR
     if check_existance(user_id: input.first)
@@ -60,7 +64,7 @@ class UserConfigDb < Db
     dataset.insert(user_id: user_id,
                    user_name: user_name,
                    role: role,
-                   status: 'Registered')
+                   status: CfgConst::Status::LOGGED)
     default_role
   end
 
