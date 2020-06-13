@@ -12,7 +12,7 @@ class Button
     raise NotImplementedError
   end
 end
-
+# Admin Buttons
 class AddAdminButton < Button
   def execute
     request.add_admin
@@ -34,5 +34,19 @@ end
 class EditSubjectButton < Button
   def execute
     request.edit_subject
+  end
+end
+
+# User Buttons
+
+class StartNostrButton
+  def execute
+    request.start_nostrification
+  end
+end
+
+class StartAdButton
+  def execute
+    request.start_advertisement
   end
 end
