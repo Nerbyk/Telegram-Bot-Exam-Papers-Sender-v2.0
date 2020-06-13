@@ -8,6 +8,8 @@ module CfgConst
     DELETE_ADMIN = 'Delete Admin'
     ADD_SUBJECT = 'Add Subject'
     EDIT_SUBJECT = 'Delete Subject'
+    START_NOSTR  = 'Start Nostrification'
+    START_AD     = 'Start Ad'
   end
 
   class BotCommands
@@ -23,6 +25,18 @@ module CfgConst
     USER  = 'user'
     DEV   = 'dev'
     MODERATOR = 'moderator'
+  end
+
+  class Status
+    LOGGED      = 'logged'
+    NAME        = 'name_step'
+    LINK        = 'link_step'
+    SUBJECTS    = 'subjects_step'
+    PHOTO       = 'photo_step'
+    IN_PROGRESS = 'in_queue'
+    REVIEWING   = 'review'
+    ACCEPTED    = 'accepted'
+    BANNED      = 'banned'
   end
 
   class Alert
