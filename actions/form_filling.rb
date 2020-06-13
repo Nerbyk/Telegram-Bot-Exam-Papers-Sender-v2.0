@@ -8,7 +8,10 @@ class Form
 
   private
 
-  def logged; end
+  def logged
+    # changing default status
+    UserConfigDb.instance.set_status(status: CfgConst::Status::NAME)
+  end
 
   def name_step; end
 
