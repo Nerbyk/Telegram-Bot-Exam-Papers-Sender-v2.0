@@ -16,6 +16,9 @@ class ButtonResponder
     when  CfgConst::BotButtons::DELETE_ADMIN then @invoker.execute(DeleteAdminButton.new(@receiver))
     when  CfgConst::BotButtons::ADD_SUBJECT then @invoker.execute(AddSubjectButton.new(@receiver))
     when  CfgConst::BotButtons::EDIT_SUBJECT then @invoker.execute(EditSubjectButton.new(@receiver))
+    when  CfgConst::BotButtons::START_NOSTR then @invoker.execute(StartNostrButton.new(@receiver))
+    when  CfgConst::BotButtons::START_AD then @invoker.execute(StartAdButton.new(@receiver))
+
     end
   end
 end
