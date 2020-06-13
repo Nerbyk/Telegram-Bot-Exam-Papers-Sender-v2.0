@@ -18,6 +18,7 @@ module CfgConst
     UPDATE_DOCUMENTS = '/update_documents'
     UPDATE_LINK = '/change_links'
     SET_ALERT   = '/amount_to_alert'
+    USER_STATUS = '/status'
   end
 
   class Roles
