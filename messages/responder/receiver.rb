@@ -44,6 +44,12 @@ class Receiver
     BotOptions.instance.send_message(text: 'set_alert_error')
   end
 
+  # user panel
+  def user_start
+    markup = MakeInlineMarkup.new(['Билеты к Нострификации', 'Start Nostrification'], ['Объявление Барахолка', 'Start Ad']).get_markup
+    BotOptions.instance.send_message(text: 'greeting_first_time_user', markup: markup)
+  end
+
   private
 
   def choose_option_msg(*buttons)
@@ -57,11 +63,6 @@ class Receiver
 
   def call_menu
     Invoker.new.execute(StartCommand.new(Receiver.new))
-  end
-
-  # User commands
-  def user_start
-    p 'started by user'
   end
 
   # Developer commands
