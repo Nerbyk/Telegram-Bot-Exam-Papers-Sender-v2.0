@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # static class with help methods for button methods
-class ReceiverHelper
+class ReceiverButtonHelper
   def self.display_string(list_from_db)
     display_string = ''
     list_from_db.each do |hash|

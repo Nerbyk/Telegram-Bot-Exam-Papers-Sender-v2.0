@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require './messages/inline_markup.rb'
-
+require './messages/responder/receiver_helper.rb'
 class Receiver
   # Admin commands
   def admin_start
@@ -49,6 +49,8 @@ class Receiver
     markup = MakeInlineMarkup.new(['Билеты к Нострификации', 'Start Nostrification'], ['Объявление Барахолка', 'Start Ad']).get_markup
     BotOptions.instance.send_message(text: 'greeting_first_time_user', markup: markup)
   end
+
+  def name_step; end
 
   private
 
