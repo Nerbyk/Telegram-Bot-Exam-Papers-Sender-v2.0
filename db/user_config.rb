@@ -14,8 +14,17 @@ class UserConfigDb < Db
     @default_role = CfgConst::Roles::USER
   end
 
-  def get_role
-    check_existance || initialize_user
+  def get_user_info(user_id: BotOptions.instance.message.from.id.to_s, user_name: BotOptions.instance.message.from.username, role: default_role)
+    # check_existance || initialize_user
+    create_or_return = dataset.where(user_id: user_id)
+    if create_or_return.update(user_id: user_id) != 1
+      dataset.insert(user_id: user_id,
+                     user_name: user_name,
+                     role: role,
+                     status: CfgConst::Status::LOGGED)
+      return create_or_return.first
+    end
+    create_or_return.first
   end
 
   def get_status
@@ -28,11 +37,14 @@ class UserConfigDb < Db
 
   def add_admin(input:)
     new_role = CfgConst::Roles::MODERATOR
-    if check_existance(user_id: input.first)
-      dataset.where(user_id: input.first).update(role: new_role)
-    else
-      initialize_user(user_id: input.first, user_name: input.last, role: new_role)
-    end
+    # initialize new user, if not created
+    get_user_info(user_id: input.first, user_name: input.last, role: new_role)
+    dataset.where(user_id: input.first).update(role: new_role)
+    # if check_existance(user_id: input.first)
+    #   dataset.where(user_id: input.first).update(role: new_role)
+    # else
+    #   initialize_user(user_id: input.first, user_name: input.last, role: new_role)
+    # end
   end
 
   def get_admins
@@ -56,21 +68,21 @@ class UserConfigDb < Db
 
   private
 
-  def check_existance(user_id: BotOptions.instance.message.from.id.to_s)
-    check = dataset.where(user_id: user_id).first[:role]
-  rescue NoMethodError # if another type of error -> error in main exeception handling
-    false
-  else
-    check
-  end
+  # def check_existance(user_id: BotOptions.instance.message.from.id.to_s)
+  #   check = dataset.where(user_id: user_id).first[:role]
+  # rescue NoMethodError # if another type of error -> error in main exeception handling
+  #   false
+  # else
+  #   check
+  # end
 
-  def initialize_user(role: default_role, user_id: BotOptions.instance.message.from.id.to_s, user_name: BotOptions.instance.message.from.username)
-    dataset.insert(user_id: user_id,
-                   user_name: user_name,
-                   role: role,
-                   status: CfgConst::Status::LOGGED)
-    default_role
-  end
+  # def initialize_user(role: default_role, user_id: BotOptions.instance.message.from.id.to_s, user_name: BotOptions.instance.message.from.username)
+  #   dataset.insert(user_id: user_id,
+  #                  user_name: user_name,
+  #                  role: role,
+  #                  status: CfgConst::Status::LOGGED)
+  #   default_role
+  # end
 
   def create
     db.create_table? table do
