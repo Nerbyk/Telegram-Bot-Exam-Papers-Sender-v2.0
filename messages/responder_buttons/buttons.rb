@@ -39,13 +39,13 @@ end
 
 # User Buttons
 
-class StartNostrButton
+class StartNostrButton < Button
   def execute
     request.start_nostrification
   end
 end
 
-class StartAdButton
+class StartAdButton < Button
   def execute
     request.start_advertisement
   end
