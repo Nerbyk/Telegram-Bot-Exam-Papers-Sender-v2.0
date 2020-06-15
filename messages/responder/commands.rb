@@ -45,8 +45,3 @@ class SetAlertAmountCommand < Command
 end
 
 # User Commands
-class NameStep
-  def execute
-    request.name_step
-  end
-end
