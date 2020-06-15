@@ -10,6 +10,7 @@ module CfgConst
     EDIT_SUBJECT = 'Delete Subject'
     START_NOSTR  = 'Start Nostrification'
     START_AD     = 'Start Ad'
+    END_INPUT    = 'Закончить Ввод'
   end
 
   class BotCommands
@@ -75,7 +76,7 @@ module CfgConst
       link = URI.parse(link)
       return false if link.path.count('/') != 1 || !community
 
-      [link.path.delete('/'), community]
+      [link.path.delete, community]
     end
 
     def identify_community(link)
