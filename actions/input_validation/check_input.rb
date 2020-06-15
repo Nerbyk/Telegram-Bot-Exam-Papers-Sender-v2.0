@@ -4,6 +4,7 @@ require 'uri'
 require './db/user_details.rb'
 require './actions/input_validation/check_membership.rb'
 class CheckUserInput
+  MAX_SUBJECTS = 6
   def self.name(input:)
     input.split(' ').length == 2
   end
@@ -22,6 +23,23 @@ class CheckUserInput
     true
   rescue Exception => e
     ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: input, exception: e.inspect)
+    false
+  end
+
+  def self.single_subject(subject:, available_list:)
+    available_list.include?(subject.text) ? true : raise('Unexpected input')
+  rescue Exception => e
+    ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: subject, exception: e.inspect)
+    false
+  end
+
+  def self.all_subjects(subjects:)
+    if subjects.length > MAX_SUBJECTS || subjects.length > subjects.uniq.length
+      raise
+    else
+      true
+    end
+  rescue Exception
     false
   end
 end
