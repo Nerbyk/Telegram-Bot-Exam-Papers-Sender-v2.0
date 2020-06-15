@@ -24,10 +24,6 @@ class User < UserRole
     super
     case BotOptions.instance.message.text
     when CfgConst::BotCommands::USER_STATUS then p 'comming soon'
-    else
-      case UserConfigDb.instance.get_status
-      when CfgConst::Status::NAME then @invoker.execute(NameStep.new(@receiver))
-      end
     end
   end
 end

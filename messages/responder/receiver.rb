@@ -50,8 +50,6 @@ class Receiver
     BotOptions.instance.send_message(text: 'greeting_first_time_user', markup: markup)
   end
 
-  def name_step; end
-
   private
 
   def choose_option_msg(*buttons)
