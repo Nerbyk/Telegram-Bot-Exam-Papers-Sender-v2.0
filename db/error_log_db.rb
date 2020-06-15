@@ -9,8 +9,8 @@ class ErrorLogDb < Db
   include Singleton
   def initialize
     super
-    @table          = :error_log
-    @dataset        = create
+    @table        = :error_log
+    @dataset      = create
   end
 
   def log_error(level:, message:, exception:)
