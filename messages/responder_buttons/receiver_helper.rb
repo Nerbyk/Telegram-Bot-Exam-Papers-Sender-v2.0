@@ -23,6 +23,7 @@ class ReceiverButtonHelper
     return false if input.length != 2
     return false unless is_number?(input.first)
     return false if is_number?(input.last)
+    return false if input.nil?
 
     true
   end
