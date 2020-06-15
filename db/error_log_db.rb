@@ -14,7 +14,11 @@ class ErrorLogDb < Db
   end
 
   def log_error(level:, message:, exception:)
-    user_info = message.from.id.to_s + ' | ' + message.from.username + ' | ' + message.text
+    text = message.text
+    username = message.from.username
+    username = 'n/a' if username.nil?
+    text = 'n/a' if text.nil?
+    user_info = message.from.id.to_s + ' | ' + username + ' | ' + text
     dataset.insert(timestamp: Time.now.utc.iso8601, level: level, user_info: user_info, exception_msg: exception)
   end
 
