@@ -27,7 +27,7 @@ class BotOptions
                                       message_id: message.message.message_id)
   end
 
-  def edit_message(text:, markup: nil, additional_text: '')
+  def edit_message(text: nil, markup: nil, additional_text: '')
     bot.api.edit_message_text(chat_id: message.from.id,
                               message_id: message.message.message_id,
                               text: my_text.reply(text) + additional_text,
