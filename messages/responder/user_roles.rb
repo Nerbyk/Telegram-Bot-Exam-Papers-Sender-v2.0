@@ -53,17 +53,19 @@ class Moderator < UserRole
 end
 
 class GetUserCommand < Struct.new(:role)
-  def initialize(role:)
+  def initialize(role:, options:)
     @role = role
   end
 
   def call
-    @role = role
     find_role_commands.new.execute
   end
 
   def find_role_commands
     Kernel.const_get(role.capitalize)
   end
-  attr_reader :role
+
+  private
+
+  attr_reader :role, :options
 end
