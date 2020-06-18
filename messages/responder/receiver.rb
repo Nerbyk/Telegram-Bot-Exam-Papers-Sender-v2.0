@@ -3,9 +3,18 @@
 require './messages/inline_markup.rb'
 require './messages/responder/receiver_helper.rb'
 class Receiver
+  attr_reader :bot, :message, :my_text
+  include BotOptions
+  def initialize(options:)
+    @options = options
+    @bot     = options[:bot]
+    @message = options[:message]
+    @my_text = options[:my_text]
+  end
+
   # Admin commands
   def admin_start
-    BotOptions.instance.send_message(text: 'greeting_menu')
+    send_message(text: 'greeting_menu')
   end
 
   def admin_manage_admins
@@ -17,37 +26,37 @@ class Receiver
   end
 
   def admin_update_link
-    BotOptions.instance.send_message(text: 'change_link', additional_text: CfgConst::Links.instance.return_current_links)
-    new_link = BotOptions.instance.get_single_input.text
+    send_message(text: 'change_link', additional_text: CfgConst::Links.instance.return_current_links)
+    new_link = get_single_input.text
     if CfgConst::Links.instance.set_new_link(new_link)
-      BotOptions.instance.send_message(text: 'change_link_succeed')
+      send_message(text: 'change_link_succeed')
       sleep(1)
       call_menu
     else
-      BotOptions.instance.send_message(text: 'change_link_fail')
+      send_message(text: 'change_link_fail')
     end
   end
 
   def admin_set_alert_amount
-    BotOptions.instance.send_message(text: 'set_alert', additional_text: CfgConst::Alert.instance.amount.to_s)
-    amount = BotOptions.instance.get_single_input.text
+    send_message(text: 'set_alert', additional_text: CfgConst::Alert.instance.amount.to_s)
+    amount = get_single_input.text
     if ReceiverHelper.is_number?(amount)
       CfgConst::Alert.instance.amount = amount
-      BotOptions.instance.send_message(text: 'set_alert_succeed')
+      send_message(text: 'set_alert_succeed')
       sleep(1)
       call_menu
     else
       raise
     end
   rescue Exception => e
-    ErrorLogDb.instance.log_error(level: '/amount_to_alert', message: BotOptions.instance.message, exception: e.class.to_s)
-    BotOptions.instance.send_message(text: 'set_alert_error')
+    ErrorLogDb.instance.log_error(level: '/amount_to_alert', message: message, exception: e.class.to_s)
+    send_message(text: 'set_alert_error')
   end
 
   # user panel
   def user_start
     markup = MakeInlineMarkup.new(['Билеты к Нострификации', 'Start Nostrification'], ['Объявление Барахолка', 'Start Ad']).get_markup
-    BotOptions.instance.send_message(text: 'greeting_first_time_user', markup: markup)
+    send_message(text: 'greeting_first_time_user', markup: markup)
   end
 
   private
@@ -58,11 +67,11 @@ class Receiver
       each_button << buttons[i]
     end
     inline_buttons = MakeInlineMarkup.new(*each_button).get_markup
-    BotOptions.instance.send_message(text: 'choose_option', markup: inline_buttons)
+    send_message(text: 'choose_option', markup: inline_buttons)
   end
 
   def call_menu
-    Invoker.new.execute(StartCommand.new(Receiver.new))
+    Invoker.new.execute(StartCommand.new(Receiver.new(options: @options), @options))
   end
 
   # Developer commands

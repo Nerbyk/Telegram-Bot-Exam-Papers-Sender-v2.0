@@ -13,13 +13,15 @@ Dotenv.load('./.env')
 
 Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
   bot.listen do |message|
-    options = {bot: bot, message: message}
+    options = { bot: bot, message: message }
     # begin
-    case message
-    when Telegram::Bot::Types::CallbackQuery
-      ButtonResponder.new.respond
-    else
-      MessageResponder.new(options: options) # TODO: class to check role of user via DB to separate access levels
+    if message.chat.type != 'channel' # restrict access to channels
+      case message
+      when Telegram::Bot::Types::CallbackQuery
+        ButtonResponder.new.respond
+      else
+        MessageResponder.new(options: options) # TODO: class to check role of user via DB to separate access levels
+      end
     end
     #  rescue StandardError => e
     #    p e

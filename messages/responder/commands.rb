@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Command
-  attr_reader :request
-  def initialize(request)
+  attr_reader :request, :options
+  def initialize(request, options)
     @request = request
+    @options = options
   end
 
   def execute
@@ -14,7 +15,7 @@ end
 # Common commands
 class StartCommand < Command
   def execute
-    command = BotOptions.instance.role.downcase + '_start'
+    command = options[:role].downcase + '_start'
     request.send(command)
   end
 end
