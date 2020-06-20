@@ -3,15 +3,20 @@
 require './messages/responder_buttons/invoker.rb'
 require './messages/responder_buttons/receiver.rb'
 require './messages/responder_buttons/buttons.rb'
-class ButtonResponder
-  def initialize
-    @receiver = ButtonReceiver.new
+
+require './messages/get_message.rb'
+require './messages/responder/user_roles.rb'
+require './db/user_config.rb'
+
+class ButtonResponder < MessageResponder # to inherit initialization, especially bot options
+  def initialize(options:)
+    super
+    @receiver = ButtonReceiver.new(options: options)
     @invoker = ButtonInvoker.new
-    GetUserRole.user_role
   end
 
   def respond
-    case BotOptions.instance.message.data
+    case  @message.data
     when  CfgConst::BotButtons::ADD_ADMIN then @invoker.execute(AddAdminButton.new(@receiver))
     when  CfgConst::BotButtons::DELETE_ADMIN then @invoker.execute(DeleteAdminButton.new(@receiver))
     when  CfgConst::BotButtons::ADD_SUBJECT then @invoker.execute(AddSubjectButton.new(@receiver))

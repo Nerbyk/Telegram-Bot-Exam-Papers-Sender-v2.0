@@ -14,7 +14,7 @@ class UserConfigDb < Db
     @default_role = CfgConst::Roles::USER
   end
 
-  def get_user_info(user_id: BotOptions.instance.message.from.id.to_s, user_name: BotOptions.instance.message.from.username, role: default_role)
+  def get_user_info(user_id:, user_name:, role: default_role)
     create_or_return = dataset.where(user_id: user_id)
     if create_or_return.update(user_id: user_id) != 1
       dataset.insert(user_id: user_id,
@@ -26,8 +26,8 @@ class UserConfigDb < Db
     create_or_return.first
   end
 
-  def set_status(status:)
-    dataset.where(user_id: BotOptions.instance.message.from.id.to_s).update(status: status)
+  def set_status(status:, user_id:)
+    dataset.where(user_id: user_id).update(status: status)
   end
 
   def add_admin(input:)

@@ -33,10 +33,10 @@ class Admin < UserRole
   def execute
     super
     case @options[:message].text
-    when CfgConst::BotCommands::MANAGE_ADMINS    then @invoker.execute(ManageAdminsCommand.new(@receiver, @options))
-    when CfgConst::BotCommands::UPDATE_DOCUMENTS then @invoker.execute(UpdateDocumentsCommand.new(@receiver, @options))
-    when CfgConst::BotCommands::UPDATE_LINK      then @invoker.execute(UpdateLinkCommand.new(@receiver, @options))
-    when CfgConst::BotCommands::SET_ALERT        then @invoker.execute(SetAlertAmountCommand.new(@receiver, @options))
+    when CfgConst::BotCommands::MANAGE_ADMINS    then @invoker.execute(ManageAdminsCommand.new(@receiver))
+    when CfgConst::BotCommands::UPDATE_DOCUMENTS then @invoker.execute(UpdateDocumentsCommand.new(@receiver))
+    when CfgConst::BotCommands::UPDATE_LINK      then @invoker.execute(UpdateLinkCommand.new(@receiver))
+    when CfgConst::BotCommands::SET_ALERT        then @invoker.execute(SetAlertAmountCommand.new(@receiver))
     end
   end
 end

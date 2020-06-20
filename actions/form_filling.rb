@@ -3,48 +3,56 @@
 require './actions/input_validation/check_input.rb'
 
 class Form
-  def initialize
+  include BotOptions
+  def initialize(options:)
+    @options = options
+    @bot     = options[:bot]
+    @message = options[:message]
+    @my_text = options[:my_text]
+    @user_id = message.from.id
+    @username = message.from.username
     @user_info = {}
   end
 
   def start
     # initialize new user if not initialized and call method according to it's status
-    send(UserConfigDb.instance.get_user_info[:status])
+    send(UserConfigDb.instance.get_user_info(user_id: @user_id,
+                                             user_name: @username)[:status])
   end
 
   private
 
   def logged
     # changing default status
-    UserConfigDb.instance.set_status(status: CfgConst::Status::NAME)
-    BotOptions.instance.edit_message(text: 'guid_user_how_to_leave')
+    UserConfigDb.instance.set_status(status: CfgConst::Status::NAME, user_id: @user_id)
+    edit_message(text: 'guid_user_how_to_leave')
     name_step
   end
 
   def name_step
-    BotOptions.instance.send_message(text: 'get_user_info_name')
-    user_input = BotOptions.instance.get_single_input
+    send_message(text: 'get_user_info_name')
+    user_input = get_single_input
     return_to_mainmenu if user_input.text == CfgConst::BotCommands::START
     if CheckUserInput.name(input: user_input.text)
       user_info[:name] = user_input.text
-      UserConfigDb.instance.set_status(status: CfgConst::Status::LINK)
+      UserConfigDb.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
       link_step
     else
       raise 'Incorrect input format'
     end
   rescue Exception => e
     ErrorLogDb.instance.log_error(level: inspect, message: user_input, exception: e.inspect)
-    BotOptions.instance.send_message(text: 'get_user_info_name_error')
+    send_message(text: 'get_user_info_name_error')
     retry
   end
 
   def link_step
-    BotOptions.instance.send_message(text: 'get_user_info_link')
-    user_input = BotOptions.instance.get_single_input
+    send_message(text: 'get_user_info_link')
+    user_input = get_single_input
     return_to_mainmenu if user_input.text == CfgConst::BotCommands::START
     if CheckUserInput.link(input: user_input)
       user_info[:link] = user_input.text
-      UserConfigDb.instance.set_status(status: CfgConst::Status::SUBJECTS)
+      UserConfigDb.instance.set_status(status: CfgConst::Status::SUBJECTS, user_id: @user_id)
       subjects_step
     else
       raise 'Link check failed'
@@ -52,7 +60,7 @@ class Form
   rescue Exception => e
     ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_input, exception: e.inspect)
     markup = MakeInlineMarkup.new(['Группа ВК', CfgConst::Links.instance.vk], ['Telegram Канал', CfgConst::Links.instance.telegram]).get_link
-    BotOptions.instance.send_message(text: 'get_user_info_link_error', markup: markup)
+    send_message(text: 'get_user_info_link_error', markup: markup)
     retry
   end
 
@@ -60,15 +68,14 @@ class Form
     available_subjects = FileConfigDb.instance.get_subjects.map(&:first)
     available_subjects = devide_subjects_for_buttons(available_subjects) << CfgConst::BotButtons::END_INPUT
     markup = MakeInlineMarkup.new(*available_subjects).get_board
-    BotOptions.instance.send_message(text: 'get_user_info_subjects', markup: markup)
+    send_message(text: 'get_user_info_subjects', markup: markup)
     all_subjects = []
     loop do
-      user_input = BotOptions.instance.get_single_input
+      user_input = get_single_input
       if CheckUserInput.single_subject(subject: user_input, available_list: available_subjects.flatten)
         all_subjects << user_input.text
       else
-
-        BotOptions.instance.send_message(text: 'get_user_info_subjects_error_keyboard')
+        send_message(text: 'get_user_info_subjects_error_keyboard')
         raise 'Single subject check failed'
       end
 
@@ -77,9 +84,8 @@ class Form
     all_subjects.delete(CfgConst::BotButtons::END_INPUT)
     if CheckUserInput.all_subjects(subjects: all_subjects)
       user_info[:subjects] = all_subjects
-      p user_info
     else
-      BotOptions.instance.send_message(text: 'get_user_info_subjects_error')
+      send_message(text: 'get_user_info_subjects_error')
       raise 'All subjects test failed'
     end
   rescue Exception
@@ -95,10 +101,10 @@ class Form
   def banned; end
 
   def return_to_mainmenu
-    BotOptions.instance.send_message(text: 'progress_has_been_reset')
+    send_message(text: 'progress_has_been_reset')
     UserConfigDb.instance.set_status(status: CfgConst::Status::LOGGED)
     sleep(1)
-    Invoker.new.execute(StartCommand.new(Receiver.new))
+    Invoker.new.execute(StartCommand.new(Receiver.new(options: @options)))
   end
 
   def devide_subjects_for_buttons(subjects)
@@ -118,4 +124,5 @@ class Form
   end
 
   attr_accessor :user_info
+  attr_reader :bot, :message, :my_text
 end

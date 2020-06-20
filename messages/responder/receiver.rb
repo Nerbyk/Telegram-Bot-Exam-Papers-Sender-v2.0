@@ -18,11 +18,13 @@ class Receiver
   end
 
   def admin_manage_admins
-    ReceiverHelper.choose_option_msg(['Добавить админа', CfgConst::BotButtons::ADD_ADMIN], ['Удалить админа', CfgConst::BotButtons::DELETE_ADMIN])
+    inline_buttons = ReceiverHelper.choose_option_msg(['Добавить админа', CfgConst::BotButtons::ADD_ADMIN], ['Удалить админа', CfgConst::BotButtons::DELETE_ADMIN])
+    send_message(text: 'choose_option', markup: inline_buttons)
   end
 
   def admin_update_documents
-    ReceiverHelper.choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
+    inline_buttons = ReceiverHelper.choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
+    send_message(text: 'choose_option', markup: inline_buttons)
   end
 
   def admin_update_link
@@ -60,15 +62,6 @@ class Receiver
   end
 
   private
-
-  def choose_option_msg(*buttons)
-    each_button = []
-    (0..buttons.length - 1).each do |i|
-      each_button << buttons[i]
-    end
-    inline_buttons = MakeInlineMarkup.new(*each_button).get_markup
-    send_message(text: 'choose_option', markup: inline_buttons)
-  end
 
   def call_menu
     Invoker.new.execute(StartCommand.new(Receiver.new(options: @options), @options))

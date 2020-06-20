@@ -60,8 +60,8 @@ module CfgConst
     def set_new_link(link)
       link, community = check_link(link)
       case community
-      when 'vk' then @vk = link
-      when 'telegram' then @telegram = link
+      when 'vk' then @vk = 'https://vk.com/' + link
+      when 'telegram' then @telegram = 'https://t.me/' + link
       end
     end
 
@@ -76,7 +76,7 @@ module CfgConst
       link = URI.parse(link)
       return false if link.path.count('/') != 1 || !community
 
-      [link.path.delete, community]
+      [link.path.delete('/'), community]
     end
 
     def identify_community(link)

@@ -2,7 +2,7 @@
 
 class Command
   attr_reader :request, :options
-  def initialize(request, options)
+  def initialize(request, options = nil)
     @request = request
     @options = options
   end
