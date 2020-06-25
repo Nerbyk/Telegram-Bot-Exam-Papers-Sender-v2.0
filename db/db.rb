@@ -103,10 +103,9 @@ module Db
     attr_reader :table, :dataset
   end
 
-  class Db::UserConfig
+  class UserConfig
     include Singleton
     def initialize
-      super
       @table        = :user_config
       @dataset      = create
       @default_role = CfgConst::Roles::USER
