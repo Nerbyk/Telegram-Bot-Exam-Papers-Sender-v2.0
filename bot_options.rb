@@ -24,14 +24,4 @@ module BotOptions
                               text: my_text.reply(text) + additional_text,
                               reply_markup: markup)
   end
-
-  def get_single_input
-    bot.listen do |message|
-      if message
-        return message
-      else
-        return false
-      end
-    end
-  end
 end
