@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 require 'uri'
-require './db/user_details.rb'
 require './actions/input_validation/check_membership.rb'
 class CheckUserInput
-  MAX_SUBJECTS = 6
+  MAX_SUBJECTS = 6 # more than 6 subjects cannot be assigned to students
   def self.name(input:)
     input.split(' ').length == 2
   end
@@ -22,14 +21,15 @@ class CheckUserInput
 
     true
   rescue Exception => e
-    ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: input, exception: e.inspect)
+    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: input, exception: e.inspect)
     false
   end
 
   def self.single_subject(subject:, available_list:)
+    available_list << CfgConst::BotCommands::START
     available_list.include?(subject.text) ? true : raise('Unexpected input')
   rescue Exception => e
-    ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: subject, exception: e.inspect)
+    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: subject, exception: e.inspect)
     false
   end
 

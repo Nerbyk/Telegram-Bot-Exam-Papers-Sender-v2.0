@@ -5,7 +5,7 @@ require 'sequel'
 require 'sqlite3'
 
 require './db/abstract_db.rb'
-class UserConfigDb < Db
+class Db::UserConfig < Db
   include Singleton
   def initialize
     super

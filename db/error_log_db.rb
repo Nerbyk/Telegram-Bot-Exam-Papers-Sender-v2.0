@@ -5,7 +5,7 @@ require 'sequel'
 require 'sqlite3'
 require 'time'
 require './db/abstract_db.rb'
-class ErrorLogDb < Db
+class Db::ErrorLog < Db
   include Singleton
   def initialize
     super

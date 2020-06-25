@@ -20,23 +20,23 @@ class ButtonReceiver
       text = input.text.split(' ')
       ReceiverButtonHelper.check_db_string(text) ? true : raise('Input check failed')
     rescue Exception => e
-      ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: input, exception: e.inspect)
+      Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: input, exception: e.inspect)
       send_message(text: 'manage_admins_error')
     else
-      UserConfigDb.instance.add_admin(input: text)
+      Db::UserConfig.instance.add_admin(input: text)
       call_menu
     end
   end
 
   def delete_admin
-    db_data = UserConfigDb.instance.get_admins
+    db_data = Db::UserConfig.instance.get_admins
     display_string = ReceiverButtonHelper.display_string(db_data)
     markup, available_buttons = ReceiverButtonHelper.markup_string(db_data)
 
     send_message(text: 'manage_admins_delete', markup: markup, additional_text: display_string)
     to_delete = get_single_input.text
     if available_buttons.flatten.include?(to_delete)
-      unless UserConfigDb.instance.delete_admin(to_delete)
+      unless Db::UserConfig.instance.delete_admin(to_delete)
         send_message(text: 'manage_admins_error')
         return
       end
@@ -58,9 +58,9 @@ class ButtonReceiver
     user_message_id = user_message.message_id
     raise 'Incorrect input' if user_message.caption.nil? || user_message.document.nil?
 
-    FileConfigDb.instance.set_subject(subject: user_message_text, message_id: user_message_id)
+    Db::FileConfig.instance.set_subject(subject: user_message_text, message_id: user_message_id)
   rescue StandardError => e
-    ErrorLogDb.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_message, exception: e.inspect)
+    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_message, exception: e.inspect)
     send_message(text: 'update_document_subject_failed')
   else
     send_message(text: 'update_document_subject_succeed')
@@ -69,14 +69,14 @@ class ButtonReceiver
   end
 
   def edit_subject
-    subject = FileConfigDb.instance.get_subjects
+    subject = Db::FileConfig.instance.get_subjects
     markup, available_buttons = ReceiverButtonHelper.markup_string(subject)
     subject.map(&:reverse!)
     display_string = ReceiverButtonHelper.display_string(subject)
     send_message(text: 'update_document_edit_showlist', additional_text: display_string, markup: markup)
     to_edit = get_single_input.text
     if available_buttons.flatten.include?(to_edit)
-      unless FileConfigDb.instance.delete_subject(to_edit)
+      unless Db::FileConfig.instance.delete_subject(to_edit)
         markup = MakeInlineMarkup.delete_board
         send_message(text: 'update_document_subject_failed', markup: markup)
         return

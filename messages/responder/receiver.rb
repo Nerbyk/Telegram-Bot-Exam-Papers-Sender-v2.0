@@ -51,7 +51,7 @@ class Receiver
       raise
     end
   rescue Exception => e
-    ErrorLogDb.instance.log_error(level: '/amount_to_alert', message: message, exception: e.class.to_s)
+    Db::ErrorLog.instance.log_error(level: '/amount_to_alert', message: message, exception: e.class.to_s)
     send_message(text: 'set_alert_error')
   end
 

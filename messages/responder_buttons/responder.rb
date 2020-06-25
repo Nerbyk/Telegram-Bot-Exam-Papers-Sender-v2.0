@@ -3,10 +3,8 @@
 require './messages/responder_buttons/invoker.rb'
 require './messages/responder_buttons/receiver.rb'
 require './messages/responder_buttons/buttons.rb'
-
 require './messages/get_message.rb'
 require './messages/responder/user_roles.rb'
-require './db/user_config.rb'
 
 class ButtonResponder < MessageResponder # to inherit initialization, especially bot options
   def initialize(options:)

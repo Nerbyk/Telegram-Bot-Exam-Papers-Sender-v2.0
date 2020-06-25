@@ -13,8 +13,13 @@ class UserRole
 
   # common comands
   def execute
+    verification = Db::UserConfig.instance.get_user_info
     case @options[:message].text
     when CfgConst::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
+    else
+      case verification
+      when CfgConst::Status::NAME
+      end
     end
   end
 end

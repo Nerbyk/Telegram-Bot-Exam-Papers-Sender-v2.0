@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require './actions/input_validation/check_input.rb'
-require './db/error_log_db.rb'
 
 describe CheckUserInput do
   describe '.single_subject' do
