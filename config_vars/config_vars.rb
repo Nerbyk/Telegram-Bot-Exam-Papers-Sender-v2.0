@@ -41,6 +41,12 @@ module CfgConst
     BANNED      = 'banned'
   end
 
+  class AdminStatus
+    MENU = 'menu'
+    ADD_ADMIN = 'add admin'
+    DELETE_ADMIN = 'delete admin'
+  end
+
   class Alert
     include Singleton
     attr_accessor :amount
