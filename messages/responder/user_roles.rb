@@ -13,13 +13,11 @@ class UserRole
 
   # common comands
   def execute
-    verification = Db::UserConfig.instance.get_user_info
+    @verification = Db::UserConfig.instance.get_user_info(user_id: @options[:message].from.id.to_s,
+                                                          user_name: @options[:message].from.username)[:status]
+    p @verification
     case @options[:message].text
     when CfgConst::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
-    else
-      case verification
-      when CfgConst::Status::NAME
-      end
     end
   end
 end
@@ -42,6 +40,11 @@ class Admin < UserRole
     when CfgConst::BotCommands::UPDATE_DOCUMENTS then @invoker.execute(UpdateDocumentsCommand.new(@receiver))
     when CfgConst::BotCommands::UPDATE_LINK      then @invoker.execute(UpdateLinkCommand.new(@receiver))
     when CfgConst::BotCommands::SET_ALERT        then @invoker.execute(SetAlertAmountCommand.new(@receiver))
+    else
+      case @verification
+      when CfgConst::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
+      when CfgConst::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))
+      end
     end
   end
 end
