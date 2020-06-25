@@ -45,4 +45,17 @@ class SetAlertAmountCommand < Command
   end
 end
 
+# Admin actions
+class AddAdminAction < Command
+  def execute
+    request.add_admin_action
+  end
+end
+
+class DeleteAdminAction < Command
+  def execute
+    request.delete_admin_action
+  end
+end
+
 # User Commands
