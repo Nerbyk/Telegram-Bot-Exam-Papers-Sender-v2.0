@@ -35,15 +35,27 @@ end
 class Admin < UserRole
   def execute
     super
-    case @options[:message].text
-    when CfgConst::BotCommands::MANAGE_ADMINS    then @invoker.execute(ManageAdminsCommand.new(@receiver))
-    when CfgConst::BotCommands::UPDATE_DOCUMENTS then @invoker.execute(UpdateDocumentsCommand.new(@receiver))
-    when CfgConst::BotCommands::UPDATE_LINK      then @invoker.execute(UpdateLinkCommand.new(@receiver))
-    when CfgConst::BotCommands::SET_ALERT        then @invoker.execute(SetAlertAmountCommand.new(@receiver))
-    else
+    if @options[:message]
+
+      if @options[:message].text == CfgConst::BotCommands::MANAGE_ADMINS
+        @invoker.execute(ManageAdminsCommand.new(@receiver))
+      end
+      if @options[:message].text == CfgConst::BotCommands::UPDATE_DOCUMENTS
+        @invoker.execute(UpdateDocumentsCommand.new(@receiver))
+      end
+      if @options[:message].text == CfgConst::BotCommands::UPDATE_LINK
+        @invoker.execute(UpdateLinkCommand.new(@receiver))
+      end
+      if @options[:message].text == CfgConst::BotCommands::SET_ALERT
+        @invoker.execute(SetAlertAmountCommand.new(@receiver))
+      end
       case @verification
       when CfgConst::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
       when CfgConst::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))
+      when CfgConst::AdminStatus::ADD_SUBJECT    then @invoker.execute(AddSubjectAction.new(@receiver))
+      when CfgConst::AdminStatus::DELETE_SUBJECT then @invoker.execute(DeleteSubjectAction.new(@receiver))
+      when CfgConst::AdminStatus::UPDATE_LINK    then @invoker.execute(UpdatLinkAction.new(@receiver))
+      when CfgConst::AdminStatus::SET_ALERT      then @invoker.execute(SetAlertAction.new(@receiver))
       end
     end
   end

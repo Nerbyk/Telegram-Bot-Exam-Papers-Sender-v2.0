@@ -42,9 +42,13 @@ module CfgConst
   end
 
   class AdminStatus
-    MENU = 'menu'
-    ADD_ADMIN = 'add admin'
-    DELETE_ADMIN = 'delete admin'
+    MENU           = 'menu'
+    ADD_ADMIN      = 'add admin'
+    DELETE_ADMIN   = 'delete admin'
+    ADD_SUBJECT    = 'add subject'
+    DELETE_SUBJECT = 'delete subject'
+    UPDATE_LINK    = 'update link'
+    SET_ALERT      = 'set alert'
   end
 
   class Alert
