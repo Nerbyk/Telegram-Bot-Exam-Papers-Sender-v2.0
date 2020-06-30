@@ -4,6 +4,9 @@ require './messages/inline_markup.rb'
 require './messages/responder/receiver_helper.rb'
 require './messages/responder/receiver_modules/admin_commands.rb'
 require './messages/responder/receiver_modules/admin_actions.rb'
+require './messages/responder/receiver_modules/user_commands.rb'
+require './actions/input_validation/check_input.rb'
+
 class Receiver
   attr_reader :bot, :message, :my_text
   include BotOptions
@@ -18,16 +21,20 @@ class Receiver
 
   include AdminActions
 
+  def user_start
+    markup = MakeInlineMarkup.new(['Билеты к Нострификации', 'Start Nostrification'], ['Объявление Барахолка', 'Start Ad']).get_markup
+    send_message(text: 'greeting_first_time_user', markup: markup)
+  end
+
+  def user_form_filling
+    Form.new(options: @options).start
+  end
   # include UserCommands
 
   # include ModeratorCommands
 
   # include DeveloperCommands
   # user panel
-  def user_start
-    markup = MakeInlineMarkup.new(['Билеты к Нострификации', 'Start Nostrification'], ['Объявление Барахолка', 'Start Ad']).get_markup
-    send_message(text: 'greeting_first_time_user', markup: markup)
-  end
 
   private
 
