@@ -15,7 +15,6 @@ class UserRole
   def execute
     @verification = Db::UserConfig.instance.get_user_info(user_id: @options[:message].from.id.to_s,
                                                           user_name: @options[:message].from.username)[:status]
-    p @verification
     case @options[:message].text
     when CfgConst::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
     end
@@ -26,8 +25,8 @@ end
 class User < UserRole
   def execute
     super
-    case @options[:message].text
-    when CfgConst::BotCommands::USER_STATUS then p 'comming soon'
+    if @options[:message].text != CfgConst::BotCommands::START
+      @invoker.execute(FormFillingAction.new(@receiver)) if @options[:message]
     end
   end
 end
