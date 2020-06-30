@@ -169,5 +169,49 @@ module Db
     attr_reader :table, :dataset, :default_role
   end
 
+  class TempUserInfo
+    include Singleton
+    def initialize
+      @table = :temp_info
+      @dataset = create
+    end
+
+    def set_name(user_id:, name:)
+      dataset.where(user_id: user_id).update(name: name)
+    end
+
+    def set_link(user_id:, link:)
+      dataset.where(user_id: user_id).update(link: link)
+    end
+
+    def set_subject(user_id:, subject:)
+      subject += ';'
+      datset.where(user_id: user_id).insert(subjects: subject)
+    end
+
+    def get_subjects(user_id:)
+      p dataset.where(user_id: user_id)
+    end
+
+    def del_row(user_id:)
+      dataset.where(user_id: user_id).delete
+    end
+
+    private
+
+    def create
+      DB.create_table? table do
+        primary_key :id
+        String :user_id
+        String :name
+        String :link
+        String :subjects
+        String :photo
+      end
+      DB[table]
+    end
+    attr_reader :dataset, :table
+  end
+
   DB = Sequel.sqlite('./db/user_config.db')
 end
