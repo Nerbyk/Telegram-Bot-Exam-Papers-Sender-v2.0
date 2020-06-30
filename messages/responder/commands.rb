@@ -58,28 +58,34 @@ class DeleteAdminAction < Command
   end
 end
 
-class AddSubjectAction < Command 
-  def execute 
+class AddSubjectAction < Command
+  def execute
     request.add_subject_action
   end
 end
 
-class DeleteSubjectAction < Command 
-  def execute 
+class DeleteSubjectAction < Command
+  def execute
     request.delete_subject_action
   end
 end
 
-class UpdatLinkAction < Command 
-  def execute 
-    request.update_link_action 
+class UpdatLinkAction < Command
+  def execute
+    request.update_link_action
   end
 end
 
-class SetAlertAction < Command 
-  def execute 
+class SetAlertAction < Command
+  def execute
     request.set_alert_action
   end
 end
 
 # User Commands
+
+class FormFillingAction < Command
+  def execute
+    request.user_form_filling
+  end
+end
