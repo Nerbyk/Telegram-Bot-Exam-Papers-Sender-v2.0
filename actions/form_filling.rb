@@ -22,42 +22,52 @@ class Form
 
   def logged
     # changing default status
-    Db::UserConfig.instance.set_status(status: CfgConst::Status::NAME, user_id: @user_id)
     edit_message(text: 'guid_user_how_to_leave')
+    name_step_trigger
+  end
+
+  def name_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::NAME, user_id: @user_id)
+    send_message(text: 'get_user_info_name')
   end
 
   def name_step
-    send_message(text: 'get_user_info_name')
-    user_input = get_single_input
-    if user_input.text == CfgConst::BotCommands::START
+    # send_message(text: 'get_user_info_name')
+    user_input = message
+    if user_input.text == CfgConst::BotCommands::STOP
       return_to_mainmenu
       return
     end
 
     if CheckUserInput.name(input: user_input.text)
       user_info[:name] = user_input.text
-      Db::UserConfig.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
+      # Db::UserConfig.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
+      link_step_trigger
     else
       raise 'Incorrect input format'
     end
   rescue Exception => e
     Db::ErrorLog.instance.log_error(level: inspect, message: user_input, exception: e.inspect)
     send_message(text: 'get_user_info_name_error')
-    retry
+  end
+
+  def link_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
+    send_message(text: 'get_user_info_link')
   end
 
   def link_step
-    send_message(text: 'get_user_info_link')
-    user_input = get_single_input
+    # send_message(text: 'get_user_info_link')
+    user_input = message
 
-    if user_input.text == CfgConst::BotCommands::START
+    if user_input.text == CfgConst::BotCommands::STOP
       return_to_mainmenu
       return
     end
 
     if CheckUserInput.link(input: user_input)
       user_info[:link] = user_input.text
-      Db::UserConfig.instance.set_status(status: CfgConst::Status::SUBJECTS, user_id: @user_id)
+      subject_step_trigger
     else
       raise 'Link check failed'
     end
@@ -65,32 +75,32 @@ class Form
     Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_input, exception: e.inspect)
     markup = MakeInlineMarkup.new(['Группа ВК', CfgConst::Links.instance.vk], ['Telegram Канал', CfgConst::Links.instance.telegram]).get_link
     send_message(text: 'get_user_info_link_error', markup: markup)
-    retry
   end
 
-  def subjects_step
+  def subject_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::SUBJECTS, user_id: @user_id)
+
     available_subjects = Db::FileConfig.instance.get_subjects.map(&:first)
     available_subjects = devide_subjects_for_buttons(available_subjects) << CfgConst::BotButtons::END_INPUT
     markup = MakeInlineMarkup.new(*available_subjects).get_board
     send_message(text: 'get_user_info_subjects', markup: markup)
-    all_subjects = []
-    loop do
-      user_input = get_single_input
+  end
 
-      if user_input.text == CfgConst::BotCommands::START
-        return_to_mainmenu
-        return
-      end
+  def subjects_step
+    user_input = message
 
-      if CheckUserInput.single_subject(subject: user_input, available_list: available_subjects.flatten)
-        all_subjects << user_input.text
-      else
-        send_message(text: 'get_user_info_subjects_error_keyboard')
-        raise 'Single subject check failed'
-      end
-
-      break if user_input.text == CfgConst::BotButtons::END_INPUT
+    if user_input.text == CfgConst::BotCommands::STOP
+      return_to_mainmenu
+      return
     end
+
+    if CheckUserInput.single_subject(subject: user_input, available_list: available_subjects.flatten)
+      all_subjects << user_input.text
+    else
+      send_message(text: 'get_user_info_subjects_error_keyboard')
+      raise 'Single subject check failed'
+    end
+
     all_subjects.delete(CfgConst::BotButtons::END_INPUT)
     if CheckUserInput.all_subjects(subjects: all_subjects)
       user_info[:subjects] = all_subjects
@@ -100,7 +110,7 @@ class Form
       raise 'All subjects test failed'
     end
   rescue Exception
-    retry
+    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_input, exception: e.inspect)
   end
 
   def photo_step; end
