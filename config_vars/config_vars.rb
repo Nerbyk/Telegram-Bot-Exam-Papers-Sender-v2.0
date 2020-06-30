@@ -15,6 +15,7 @@ module CfgConst
 
   class BotCommands
     START = '/start'
+    STOP = '/stop'
     MANAGE_ADMINS = '/manage_admins'
     UPDATE_DOCUMENTS = '/update_documents'
     UPDATE_LINK = '/change_links'
