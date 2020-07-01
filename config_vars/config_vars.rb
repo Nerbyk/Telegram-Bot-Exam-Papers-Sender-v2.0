@@ -4,12 +4,14 @@ require 'singleton'
 require 'uri'
 module CfgConst
   class BotButtons
-    ADD_ADMIN = 'Add Admin'
+    ADD_ADMIN    = 'Add Admin'
     DELETE_ADMIN = 'Delete Admin'
-    ADD_SUBJECT = 'Add Subject'
+    ADD_SUBJECT  = 'Add Subject'
     EDIT_SUBJECT = 'Delete Subject'
     START_NOSTR  = 'Start Nostrification'
     START_AD     = 'Start Ad'
+    SEND_REQ     = 'Send Request'
+    RESET_REQ    = 'Reset Requet'
     END_INPUT    = 'Закончить Ввод'
   end
 
@@ -40,6 +42,7 @@ module CfgConst
     REVIEWING   = 'review'
     ACCEPTED    = 'accepted'
     BANNED      = 'banned'
+    ISCORRECT   = 'correctly?'
   end
 
   class AdminStatus
