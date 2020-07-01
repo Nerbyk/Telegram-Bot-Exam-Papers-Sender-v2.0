@@ -22,13 +22,15 @@ class Receiver
   include AdminActions
 
   def user_start
-    markup = MakeInlineMarkup.new(['Билеты к Нострификации', 'Start Nostrification'], ['Объявление Барахолка', 'Start Ad']).get_markup
+    markup = MakeInlineMarkup.new(['Билеты к Нострификации', CfgConst::BotButtons::START_NOSTR],
+                                  ['Объявление Барахолка', CfgConst::BotButtons::START_AD]).get_markup
     send_message(text: 'greeting_first_time_user', markup: markup)
   end
 
   def user_form_filling
     Form.new(options: @options).start
   end
+
   # include UserCommands
 
   # include ModeratorCommands
