@@ -14,11 +14,16 @@ module Db
     end
 
     def log_error(level:, message:, exception:)
-      text = message.text
-      username = message.from.username
-      username = 'n/a' if username.nil?
-      text = 'n/a' if text.nil?
-      user_info = message.from.id.to_s + ' | ' + username + ' | ' + text
+      if message.nil?
+        user_info = 'n/a'
+      else
+        text = message.text
+        username = message.from.username
+        username = 'n/a' if username.nil?
+        text = 'n/a' if text.nil?
+        user_info = message.from.id.to_s + ' | ' + username + ' | ' + text
+      end
+
       dataset.insert(timestamp: Time.now.utc.iso8601, level: level, user_info: user_info, exception_msg: exception)
     end
 
@@ -176,6 +181,10 @@ module Db
       @dataset = create
     end
 
+    def set_user(user_id:)
+      dataset.insert(user_id: user_id) if dataset.where(user_id: user_id).update(user_id: user_id) != 1
+    end
+
     def set_name(user_id:, name:)
       dataset.where(user_id: user_id).update(name: name)
     end
@@ -186,15 +195,30 @@ module Db
 
     def set_subject(user_id:, subject:)
       subject += ';'
-      datset.where(user_id: user_id).insert(subjects: subject)
+      saved_subjects = dataset.where(user_id: user_id).first[:subjects]
+      saved_subjects = '' if saved_subjects.nil?
+      saved_subjects += subject
+      dataset.where(user_id: user_id).update(subjects: saved_subjects)
     end
 
     def get_subjects(user_id:)
-      p dataset.where(user_id: user_id)
+      dataset.where(user_id: user_id).first[:subjects]
+    end
+
+    def del_subjects(user_id:)
+      dataset.where(user_id: user_id).update(subjects: nil)
+    end
+
+    def set_photo(user_id:, photo:)
+      dataset.where(user_id: user_id).update(photo: photo)
     end
 
     def del_row(user_id:)
       dataset.where(user_id: user_id).delete
+    end
+
+    def get_user_data(user_id:)
+      dataset.where(user_id: user_id).first
     end
 
     private
