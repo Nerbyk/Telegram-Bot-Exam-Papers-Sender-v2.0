@@ -24,4 +24,11 @@ module BotOptions
                               text: my_text.reply(text) + additional_text,
                               reply_markup: markup)
   end
+
+  def send_photo(text: nil, markup: nil, photo: nil, additional_text: '')
+    bot.api.send_photo(chat_id: message.from.id,
+                       photo: photo,
+                       caption: my_text.reply(text) + additional_text,
+                       reply_markup: markup)
+  end
 end
