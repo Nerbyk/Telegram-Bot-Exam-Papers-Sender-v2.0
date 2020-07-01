@@ -11,7 +11,6 @@ class Form
     @my_text = options[:my_text]
     @user_id = message.from.id
     @username = message.from.username
-    @user_info = {}
   end
 
   def start
@@ -26,13 +25,7 @@ class Form
     name_step_trigger
   end
 
-  def name_step_trigger
-    Db::UserConfig.instance.set_status(status: CfgConst::Status::NAME, user_id: @user_id)
-    send_message(text: 'get_user_info_name')
-  end
-
   def name_step
-    # send_message(text: 'get_user_info_name')
     user_input = message
     if user_input.text == CfgConst::BotCommands::STOP
       return_to_mainmenu
@@ -40,20 +33,11 @@ class Form
     end
 
     if CheckUserInput.name(input: user_input.text)
-      user_info[:name] = user_input.text
-      # Db::UserConfig.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
+      Db::TempUserInfo.instance.set_name(user_id: @user_id, name: user_input.text)
       link_step_trigger
     else
-      raise 'Incorrect input format'
+      send_message(text: 'get_user_info_name_error')
     end
-  rescue Exception => e
-    Db::ErrorLog.instance.log_error(level: inspect, message: user_input, exception: e.inspect)
-    send_message(text: 'get_user_info_name_error')
-  end
-
-  def link_step_trigger
-    Db::UserConfig.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
-    send_message(text: 'get_user_info_link')
   end
 
   def link_step
@@ -65,28 +49,46 @@ class Form
       return
     end
 
-    if CheckUserInput.link(input: user_input)
-      user_info[:link] = user_input.text
+    if CheckUserInput.link(input: user_input, options: @options)
+      Db::TempUserInfo.instance.set_link(user_id: @user_id, link: user_input.text)
       subject_step_trigger
     else
       raise 'Link check failed'
     end
-  rescue Exception => e
-    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_input, exception: e.inspect)
+  rescue Exception
     markup = MakeInlineMarkup.new(['Группа ВК', CfgConst::Links.instance.vk], ['Telegram Канал', CfgConst::Links.instance.telegram]).get_link
     send_message(text: 'get_user_info_link_error', markup: markup)
   end
 
-  def subject_step_trigger
-    Db::UserConfig.instance.set_status(status: CfgConst::Status::SUBJECTS, user_id: @user_id)
-
+  def subjects_step
+    user_input = message
     available_subjects = Db::FileConfig.instance.get_subjects.map(&:first)
     available_subjects = devide_subjects_for_buttons(available_subjects) << CfgConst::BotButtons::END_INPUT
-    markup = MakeInlineMarkup.new(*available_subjects).get_board
-    send_message(text: 'get_user_info_subjects', markup: markup)
+    if user_input.text == CfgConst::BotCommands::STOP
+      return_to_mainmenu
+      return
+    end
+
+    if user_input.text != CfgConst::BotButtons::END_INPUT
+      if CheckUserInput.single_subject(input: user_input, available_list: available_subjects.flatten)
+        Db::TempUserInfo.instance.set_subject(user_id: @user_id, subject: user_input.text)
+      else
+        markup = subject_keyboard
+        send_message(text: 'get_user_info_subjects_error_keyboard', markup: markup)
+      end
+    else
+      all_subjects = Db::TempUserInfo.instance.get_subjects(user_id: @user_id.to_s).split(';')
+      if CheckUserInput.all_subjects(input: all_subjects)
+        photo_step_trigger
+      else
+        send_message(text: 'get_user_info_subjects_error')
+        Db::TempUserInfo.instance.del_subjects(user_id: @user_id)
+
+      end
+    end
   end
 
-  def subjects_step
+  def photo_step
     user_input = message
 
     if user_input.text == CfgConst::BotCommands::STOP
@@ -94,26 +96,18 @@ class Form
       return
     end
 
-    if CheckUserInput.single_subject(subject: user_input, available_list: available_subjects.flatten)
-      all_subjects << user_input.text
+    if CheckUserInput.check_photo_format(input: user_input)
+      photo = bot.api.get_updates.dig('result', 0, 'message', 'photo', -1, 'file_id')
+      Db::TempUserInfo.instance.set_photo(user_id: @user_id, photo: photo)
+      acceptance_step_markup
     else
-      send_message(text: 'get_user_info_subjects_error_keyboard')
-      raise 'Single subject check failed'
+      send_message(text: 'get_user_info_image_error')
     end
-
-    all_subjects.delete(CfgConst::BotButtons::END_INPUT)
-    if CheckUserInput.all_subjects(subjects: all_subjects)
-      user_info[:subjects] = all_subjects
-      puts("username: #{@username} | data #{user_info}")
-    else
-      send_message(text: 'get_user_info_subjects_error')
-      raise 'All subjects test failed'
-    end
-  rescue Exception
-    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_input, exception: e.inspect)
   end
 
-  def photo_step; end
+  def correctly?
+    p 'get input'
+  end
 
   def in_queue; end
 
@@ -122,6 +116,52 @@ class Form
   def banned; end
 
   private
+
+  # methods to trigger user to send a message and change status in DB
+  # due functionality of tg need to implement this methods
+  # (first you get the user data and then u process this data)
+  def name_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::NAME, user_id: @user_id)
+    Db::TempUserInfo.instance.set_user(user_id: @user_id.to_s)
+    send_message(text: 'get_user_info_name')
+  end
+
+  def link_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::LINK, user_id: @user_id)
+    send_message(text: 'get_user_info_link')
+  end
+
+  def subject_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::SUBJECTS, user_id: @user_id)
+    markup = subject_keyboard
+    send_message(text: 'get_user_info_subjects', markup: markup)
+  end
+
+  def photo_step_trigger
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::PHOTO, user_id: @user_id)
+    markup = MakeInlineMarkup.delete_board
+    send_message(text: 'get_user_info_image', markup: markup)
+  end
+
+  def acceptance_step_markup
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::ISCORRECT, user_id: @user_id)
+    markup = MakeInlineMarkup.new(['Отправить Заявку', CfgConst::BotButtons::SEND_REQ],
+                                  ['Заполнить Заного', CfgConst::BotButtons::RESET_REQ]).get_markup
+    user_data = Db::TempUserInfo.instance.get_user_data(user_id: @user_id)
+    photo = user_data[:photo]
+    user_info = 'Имя и Фамилия: ' + user_data[:name] + "\n" + 'Предметы: ' + user_data[:subjects].split(';').join(' ')
+    send_photo(text: 'acceptance_step_show_info',
+               additional_text: user_info,
+               photo: photo,
+               markup: markup)
+  end
+
+  # some class helper methods to interact with user and data he passes
+  def subject_keyboard
+    available_subjects = Db::FileConfig.instance.get_subjects.map(&:first)
+    available_subjects = devide_subjects_for_buttons(available_subjects) << CfgConst::BotButtons::END_INPUT
+    MakeInlineMarkup.new(*available_subjects).get_board
+  end
 
   def return_to_mainmenu
     markup = MakeInlineMarkup.delete_board
@@ -147,6 +187,5 @@ class Form
     return_array
   end
 
-  attr_accessor :user_info
   attr_reader :bot, :message, :my_text
 end
