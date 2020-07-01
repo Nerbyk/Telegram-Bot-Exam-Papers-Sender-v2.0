@@ -45,6 +45,18 @@ class ButtonReceiver
     Form.new(options: @options).start
   end
 
+  def send_user_request
+    Db::UserConfing.intance.set_status(status: CfgConst::Status::IN_PROGRESS)
+    # move data from UserConfig and TempData to New table with full data
+    Db::TempUserInfo.instance.del_row(user_id: message.from.id.to_s)
+    Form.new(options: @options).start
+  end
+
+  def reset_user_request
+    Db::UserConfig.instance.set_status(status: CfgConst::Status::LOGGED, user_id: message.from.id.to_s)
+    Form.new(options: @options).start
+  end
+
   def start_advertisement
     p 'in progress'
   end
