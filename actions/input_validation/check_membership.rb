@@ -3,8 +3,10 @@
 require 'vkontakte_api'
 require 'uri'
 class CheckMembership
-  def initialize(link_path:)
+  def initialize(link_path:, options:)
     @link_path    = link_path
+    @options      = options
+    @user_id      = options[:message].from.id
     @token        = ENV['VK_TOKEN']
     @version      = ENV['VK_API_VERSION']
     @vk           = VkontakteApi::Client.new(token)
@@ -16,9 +18,12 @@ class CheckMembership
     link_path = get_numeric_user_id
     vk_status = vk.groups.isMember('v' => version, 'group_id' => group_id, 'user_id' => link_path.to_i)
     vk_status = vk_status == 1
-    # telegram_status = BotOptions.instance.bot.getChatMember(chat_id: '@' + community_id, user_id: BotOptions.instance.message.from.id)
-    # telegram_status['result']['status']
-    telegram_status = true
+    telegram_status = @options[:bot].api.getChatMember(chat_id: '@' + community_id, user_id: @user_id)
+    telegram_status = if telegram_status['result']['status'] == 'member' || telegram_status['result']['status'] == 'administrator'
+                        true
+                      else
+                        false
+                      end
     vk_status == telegram_status
   end
 
