@@ -21,6 +21,8 @@ class ButtonResponder < MessageResponder # to inherit initialization, especially
     when  CfgConst::BotButtons::EDIT_SUBJECT then @invoker.execute(EditSubjectButton.new(@receiver))
     when  CfgConst::BotButtons::START_NOSTR then @invoker.execute(StartNostrButton.new(@receiver))
     when  CfgConst::BotButtons::START_AD then @invoker.execute(StartAdButton.new(@receiver))
+    when  CfgConst::BotButtons::SEND_REQ then @invoker.execute(SendRequestButton.new(@receiver))
+    when  CfgConst::BotButtons::RESET_REQ then @invoker.execute(ResetRequestButton.new(@receiver))
     end
   end
 end

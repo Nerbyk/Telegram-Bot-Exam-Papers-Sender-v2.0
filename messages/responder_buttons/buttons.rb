@@ -50,3 +50,15 @@ class StartAdButton < Button
     request.start_advertisement
   end
 end
+
+class SendRequestButton < Button
+  def execute
+    request.send_user_request
+  end
+end
+
+class ResetRequestButton < Button
+  def execute
+    request.reset_user_request
+  end
+end
