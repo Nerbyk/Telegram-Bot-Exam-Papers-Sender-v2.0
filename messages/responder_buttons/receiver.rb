@@ -48,6 +48,7 @@ class ButtonReceiver
   def send_user_request
     delete_markup
     Db::User.instance.set_status(status: CfgConst::Status::IN_PROGRESS, user_id: message.from.id.to_s)
+    AmountOfRequests.instance.log
     Form.new(options: @options).start
   end
 
