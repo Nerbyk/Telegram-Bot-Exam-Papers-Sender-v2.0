@@ -23,6 +23,7 @@ module CfgConst
     UPDATE_LINK = '/change_links'
     SET_ALERT   = '/amount_to_alert'
     USER_STATUS = '/status'
+    REQ_IN_REVIEW = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
   end
 
   class Roles
