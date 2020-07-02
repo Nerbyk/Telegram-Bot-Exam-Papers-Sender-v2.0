@@ -13,8 +13,8 @@ class UserRole
 
   # common comands
   def execute
-    @verification = Db::UserConfig.instance.get_user_info(user_id: @options[:message].from.id.to_s,
-                                                          user_name: @options[:message].from.username)[:status]
+    @verification = Db::User.instance.get_user_info(user_id: @options[:message].from.id.to_s,
+                                                    user_name: @options[:message].from.username)[:status]
     case @options[:message].text
     when CfgConst::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
     end
@@ -25,8 +25,10 @@ end
 class User < UserRole
   def execute
     super
-    if @options[:message].text != CfgConst::BotCommands::START
+    if @verification != CfgConst::Status::LOGGED
       @invoker.execute(FormFillingAction.new(@receiver)) if @options[:message]
+    elsif @verification == CfgConst::Status::LOGGED && @options[:message].text != CfgConst::BotCommands::START
+      @invoker.execute(UnexpectedCommand.new(@receiver, @options))
     end
   end
 end
