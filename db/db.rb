@@ -80,34 +80,6 @@ module Db
     attr_reader :table, :dataset
   end
 
-  class UserDetailsNostr
-    include Singleton
-    def initialize
-      @table          = :user_details_nostr
-      @dataset        = create
-    end
-
-    # return false if row with specific data(link) exists
-
-    private
-
-    def create
-      DB.create_table? table do
-        primary_key :id
-        String :user_id
-        String :user_name
-        String :name
-        String :link
-        String :subjects
-        String :image
-        String :status
-      end
-      DB[table]
-    end
-
-    attr_reader :table, :dataset
-  end
-
   class User
     include Singleton
     def initialize
@@ -156,6 +128,10 @@ module Db
       dataset.where(user_id: user_id).update(role: CfgConst::Roles::USER)
     rescue StandardError
       false
+    end
+
+    def get_amount_in_queue
+      dataset.where(status: CfgConst::Status::IN_PROGRESS).count
     end
 
     private
