@@ -4,7 +4,6 @@ require './messages/inline_markup.rb'
 require './messages/responder/receiver_helper.rb'
 require './messages/responder/receiver_modules/admin_commands.rb'
 require './messages/responder/receiver_modules/admin_actions.rb'
-require './messages/responder/receiver_modules/user_commands.rb'
 require './actions/input_validation/check_input.rb'
 
 class Receiver
