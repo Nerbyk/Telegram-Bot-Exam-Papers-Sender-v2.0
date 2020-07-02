@@ -27,6 +27,10 @@ class Receiver
     send_message(text: 'greeting_first_time_user', markup: markup)
   end
 
+  def unexpected_message
+    send_message(text: 'unexpected_message')
+  end
+
   def user_form_filling
     Form.new(options: @options).start
   end

@@ -20,6 +20,12 @@ class StartCommand < Command
   end
 end
 
+class UnexpectedCommand < Command
+  def execute
+    request.unexpected_message
+  end
+end
+
 # Admin commands
 class ManageAdminsCommand < Command
   def execute
