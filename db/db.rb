@@ -108,7 +108,7 @@ module Db
     attr_reader :table, :dataset
   end
 
-  class UserConfig
+  class User
     include Singleton
     def initialize
       @table        = :user_config
@@ -162,8 +162,7 @@ module Db
 
     def create
       DB.create_table? table do
-        primary_key :id
-        String :user_id
+        primary_key :user_id
         String :user_name
         String :role
         String :status
@@ -174,7 +173,7 @@ module Db
     attr_reader :table, :dataset, :default_role
   end
 
-  class TempUserInfo
+  class UserMessage
     include Singleton
     def initialize
       @table = :temp_info
@@ -182,7 +181,9 @@ module Db
     end
 
     def set_user(user_id:)
-      dataset.insert(user_id: user_id) if dataset.where(user_id: user_id).update(user_id: user_id) != 1
+      if dataset.where(user_id: user_id).update(user_id: user_id) != 1
+        dataset.insert(user_id: user_id, created: Date.today)
+      end
     end
 
     def set_name(user_id:, name:)
@@ -217,6 +218,14 @@ module Db
       dataset.where(user_id: user_id).delete
     end
 
+    def reset_row(user_id:)
+      dataset.where(user_id: user_id).update(created: nil,
+                                             name: nil,
+                                             link: nil,
+                                             subjects: nil,
+                                             photo: nil)
+    end
+
     def get_user_data(user_id:)
       dataset.where(user_id: user_id).first
     end
@@ -225,8 +234,8 @@ module Db
 
     def create
       DB.create_table? table do
-        primary_key :id
-        String :user_id
+        foreign_key :user_id, :user_config
+        Date   :created
         String :name
         String :link
         String :subjects
