@@ -111,6 +111,7 @@ class Form
 
   def in_queue
     send_message(text: 'request_sent')
+    Db::User.instance.get_amount_in_queue
   end
 
   def accepted; end

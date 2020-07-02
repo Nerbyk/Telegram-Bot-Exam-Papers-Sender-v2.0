@@ -7,6 +7,7 @@ require './messages/responder/responder.rb'
 require './messages/responder_buttons/responder.rb'
 require './config_vars/config_vars.rb'
 require './db/db.rb'
+require './services/req_amount_observer.rb'
 
 Dotenv.load('./.env')
 
