@@ -20,8 +20,9 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
     else
       MessageResponder.new(options: options).respond if message.chat.type != 'channel' # restrict access to channels
     end
-    #  rescue StandardError => e
-    #    p e
-    #  end
+    rescue StandardError => e
+       p e
+       p message.from.id
+       p message.from.username
   end
 end
