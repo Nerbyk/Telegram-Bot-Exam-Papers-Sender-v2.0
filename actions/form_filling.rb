@@ -110,8 +110,20 @@ class Form
   end
 
   def in_queue
-    send_message(text: 'request_sent')
-    Db::User.instance.get_amount_in_queue
+    if message.text == CfgConst::BotCommands::USER_STATUS
+      state_of_req = Db::User.instance.get_position_in_queue(user_id: @user_id)
+      send_message(text: 'request_status_not_nil', additional_text: state_of_req)
+    else
+      send_message(text: 'request_sent')
+      Db::User.instance.get_amount_in_queue
+    end
+  end
+
+  def review
+    if message.text == CfgConst::BotCommands::USER_STATUS
+      state_of_req = CfgConst::BotCommands::REQ_IN_REVIEW
+      send_message(text: 'request_status_not_nil', additional_text: state_of_req)
+    end
   end
 
   def accepted; end
