@@ -41,7 +41,7 @@ class CheckMembership
 
   def get_numeric_user_id
     if link_path.include?('id')
-      link_path.slice!('id')
+      link_path.delete('id').to_i
     else
       numeric_id = vk.users.get("v": version, "user_ids": link_path, "fields": 'id')
       numeric_id[0]['id']

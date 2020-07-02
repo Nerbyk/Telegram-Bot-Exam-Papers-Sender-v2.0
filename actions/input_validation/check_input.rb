@@ -5,7 +5,7 @@ require './actions/input_validation/check_membership.rb'
 class CheckUserInput
   MAX_SUBJECTS = 6 # more than 6 subjects cannot be assigned to students
   def self.name(input:)
-    if input.split(' ').length == 2
+    if input.text.split(' ').length == 2
       true
     else
       raise 'Incorrect input format'
