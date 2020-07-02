@@ -7,7 +7,7 @@ class MessageResponder
   def initialize(options:)
     @options = options
     @message = options[:message]
-    options[:role] = Db::UserConfig.instance.get_user_info(user_id: options[:message].from.id.to_s, user_name: options[:message].from.username)[:role]
+    options[:role] = Db::User.instance.get_user_info(user_id: options[:message].from.id.to_s, user_name: options[:message].from.username)[:role]
     options[:my_text] = GetMessageText.new(client: options[:role].downcase)
   end
 

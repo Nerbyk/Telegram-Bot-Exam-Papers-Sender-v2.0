@@ -3,7 +3,7 @@
 module AdminCommands
   def admin_start
     send_message(text: 'greeting_menu')
-    Db::UserConfig.instance.set_status(status: CfgConst::AdminStatus::MENU, user_id: message.from.id.to_s)
+    Db::User.instance.set_status(status: CfgConst::AdminStatus::MENU, user_id: message.from.id.to_s)
   end
 
   def admin_manage_admins
@@ -18,11 +18,11 @@ module AdminCommands
 
   def admin_update_link
     send_message(text: 'change_link', additional_text: CfgConst::Links.instance.return_current_links)
-    Db::UserConfig.instance.set_status(status: CfgConst::AdminStatus::UPDATE_LINK, user_id: message.from.id.to_s)
+    Db::User.instance.set_status(status: CfgConst::AdminStatus::UPDATE_LINK, user_id: message.from.id.to_s)
   end
 
   def admin_set_alert_amount
     send_message(text: 'set_alert', additional_text: CfgConst::Alert.instance.amount.to_s)
-    Db::UserConfig.instance.set_status(status: CfgConst::AdminStatus::SET_ALERT, user_id: message.from.id.to_s)
+    Db::User.instance.set_status(status: CfgConst::AdminStatus::SET_ALERT, user_id: message.from.id.to_s)
   end
 end
