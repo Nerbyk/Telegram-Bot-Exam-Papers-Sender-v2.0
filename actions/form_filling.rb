@@ -109,13 +109,8 @@ class Form
   end
 
   def in_queue
-    if message.text == Config::BotCommands::USER_STATUS
-      state_of_req = Db::User.instance.get_position_in_queue(user_id: @user_id)
-      send_message(text: 'request_status_not_nil', additional_text: state_of_req)
-    else
-      send_message(text: 'request_sent')
-      Db::User.instance.get_amount_in_queue
-    end
+    state_of_req = Db::User.instance.get_position_in_queue(user_id: @user_id).to_s
+    send_message(text: 'request_status_not_nil', additional_text: state_of_req)
   end
 
   def review
