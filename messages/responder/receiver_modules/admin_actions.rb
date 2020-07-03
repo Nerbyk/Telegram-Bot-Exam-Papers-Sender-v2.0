@@ -70,7 +70,7 @@ module AdminActions
 
   def update_link_action
     new_link = message.text
-    if CfgConst::Links.instance.set_new_link(new_link)
+    if Config::Links.instance.set_new_link(new_link)
       send_message(text: 'change_link_succeed')
       sleep(1)
       call_menu
@@ -82,7 +82,7 @@ module AdminActions
   def set_alert_action
     amount = message.text
     if ReceiverHelper.is_number?(amount)
-      CfgConst::Alert.instance.amount = amount
+      Config::Alert.instance.amount = amount
       send_message(text: 'set_alert_succeed')
       sleep(1)
       call_menu

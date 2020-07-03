@@ -34,7 +34,7 @@ class CheckUserInput
   end
 
   def self.single_subject(input:, available_list:)
-    available_list << CfgConst::BotCommands::STOP
+    available_list << Config::BotCommands::STOP
     available_list.include?(input.text) ? true : raise('Unexpected input')
   rescue Exception => e
     to_log(level: inspect, exception: e, user_input: input)
@@ -42,6 +42,7 @@ class CheckUserInput
   end
 
   def self.all_subjects(input:)
+    input = input.split(';')
     if input.length > MAX_SUBJECTS || input.length > input.uniq.length
       raise 'Single subject check failed'
     else

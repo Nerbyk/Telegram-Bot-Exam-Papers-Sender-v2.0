@@ -2,7 +2,7 @@
 
 require 'singleton'
 require 'uri'
-module CfgConst
+module Config
   class BotButtons
     ADD_ADMIN    = 'Add Admin'
     DELETE_ADMIN = 'Delete Admin'
@@ -80,7 +80,7 @@ module CfgConst
       end
     end
 
-    def return_current_links
+    def get_links
       @vk + " \n\n" + @telegram
     end
 

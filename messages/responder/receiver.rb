@@ -8,7 +8,7 @@ require './actions/input_validation/check_input.rb'
 
 class Receiver
   attr_reader :bot, :message, :my_text
-  include BotOptions
+  include BotActions
   def initialize(options:)
     @options = options
     @bot     = options[:bot]
@@ -21,8 +21,8 @@ class Receiver
   include AdminActions
 
   def user_start
-    markup = MakeInlineMarkup.new(['Билеты к Нострификации', CfgConst::BotButtons::START_NOSTR],
-                                  ['Объявление Барахолка', CfgConst::BotButtons::START_AD]).get_markup
+    markup = MakeInlineMarkup.new(['Билеты к Нострификации', Config::BotButtons::START_NOSTR],
+                                  ['Объявление Барахолка', Config::BotButtons::START_AD]).get_markup
     send_message(text: 'greeting_first_time_user', markup: markup)
   end
 

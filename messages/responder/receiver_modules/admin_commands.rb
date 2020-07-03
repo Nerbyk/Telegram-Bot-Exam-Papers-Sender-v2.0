@@ -3,26 +3,26 @@
 module AdminCommands
   def admin_start
     send_message(text: 'greeting_menu')
-    Db::User.instance.set_status(status: CfgConst::AdminStatus::MENU, user_id: message.from.id.to_s)
+    Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   end
 
   def admin_manage_admins
-    inline_buttons = ReceiverHelper.choose_option_msg(['Добавить админа', CfgConst::BotButtons::ADD_ADMIN], ['Удалить админа', CfgConst::BotButtons::DELETE_ADMIN])
+    inline_buttons = ReceiverHelper.choose_option_msg(['Добавить админа', Config::BotButtons::ADD_ADMIN], ['Удалить админа', Config::BotButtons::DELETE_ADMIN])
     send_message(text: 'choose_option', markup: inline_buttons)
   end
 
   def admin_update_documents
-    inline_buttons = ReceiverHelper.choose_option_msg(['Добавить новый предмет', CfgConst::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', CfgConst::BotButtons::EDIT_SUBJECT])
+    inline_buttons = ReceiverHelper.choose_option_msg(['Добавить новый предмет', Config::BotButtons::ADD_SUBJECT], ['Редактировать Существующий', Config::BotButtons::EDIT_SUBJECT])
     send_message(text: 'choose_option', markup: inline_buttons)
   end
 
   def admin_update_link
-    send_message(text: 'change_link', additional_text: CfgConst::Links.instance.return_current_links)
-    Db::User.instance.set_status(status: CfgConst::AdminStatus::UPDATE_LINK, user_id: message.from.id.to_s)
+    send_message(text: 'change_link', additional_text: Config::Links.instance.get_links)
+    Db::User.instance.set_status(status: Config::AdminStatus::UPDATE_LINK, user_id: message.from.id.to_s)
   end
 
   def admin_set_alert_amount
-    send_message(text: 'set_alert', additional_text: CfgConst::Alert.instance.amount.to_s)
-    Db::User.instance.set_status(status: CfgConst::AdminStatus::SET_ALERT, user_id: message.from.id.to_s)
+    send_message(text: 'set_alert', additional_text: Config::Alert.instance.amount.to_s)
+    Db::User.instance.set_status(status: Config::AdminStatus::SET_ALERT, user_id: message.from.id.to_s)
   end
 end

@@ -85,7 +85,7 @@ module Db
     def initialize
       @table        = :user_config
       @dataset      = create
-      @default_role = CfgConst::Roles::USER
+      @default_role = Config::Roles::USER
     end
 
     def get_user_info(user_id:, user_name:, role: default_role)
@@ -94,7 +94,7 @@ module Db
         dataset.insert(user_id: user_id,
                        user_name: user_name,
                        role: role,
-                       status: CfgConst::Status::LOGGED)
+                       status: Config::Status::LOGGED)
         return create_or_return.first
       end
       create_or_return.first
@@ -105,7 +105,7 @@ module Db
     end
 
     def add_admin(input:)
-      new_role = CfgConst::Roles::MODERATOR
+      new_role = Config::Roles::MODERATOR
       # initialize new user, if not created
       get_user_info(user_id: input.first, user_name: input.last, role: new_role)
       dataset.where(user_id: input.first).update(role: new_role)
@@ -114,7 +114,7 @@ module Db
     def get_admins
       return_array = []
       dataset.each do |row|
-        next unless row[:role].include?(CfgConst::Roles::MODERATOR)
+        next unless row[:role].include?(Config::Roles::MODERATOR)
 
         spec_data = []
         spec_data << row[:user_id]
@@ -125,13 +125,13 @@ module Db
     end
 
     def delete_admin(user_id)
-      dataset.where(user_id: user_id).update(role: CfgConst::Roles::USER)
+      dataset.where(user_id: user_id).update(role: Config::Roles::USER)
     rescue StandardError
       false
     end
 
     def get_amount_in_queue
-      dataset.where(status: CfgConst::Status::IN_PROGRESS).count
+      dataset.where(status: Config::Status::IN_PROGRESS).count
     end
 
     def get_position_in_queue(user_id:)

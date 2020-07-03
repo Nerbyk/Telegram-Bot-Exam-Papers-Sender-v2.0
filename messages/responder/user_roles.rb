@@ -16,7 +16,7 @@ class UserRole
     @verification = Db::User.instance.get_user_info(user_id: @options[:message].from.id.to_s,
                                                     user_name: @options[:message].from.username)[:status]
     case @options[:message].text
-    when CfgConst::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
+    when Config::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
     end
   end
 end
@@ -25,9 +25,9 @@ end
 class User < UserRole
   def execute
     super
-    if @verification != CfgConst::Status::LOGGED
+    if @verification != Config::Status::LOGGED
       @invoker.execute(FormFillingAction.new(@receiver)) if @options[:message]
-    elsif @verification == CfgConst::Status::LOGGED && @options[:message].text != CfgConst::BotCommands::START
+    elsif @verification == Config::Status::LOGGED && @options[:message].text != Config::BotCommands::START
       @invoker.execute(UnexpectedCommand.new(@receiver, @options))
     end
   end
@@ -38,25 +38,23 @@ class Admin < UserRole
     super
     if @options[:message]
 
-      if @options[:message].text == CfgConst::BotCommands::MANAGE_ADMINS
+      if @options[:message].text == Config::BotCommands::MANAGE_ADMINS
         @invoker.execute(ManageAdminsCommand.new(@receiver))
       end
-      if @options[:message].text == CfgConst::BotCommands::UPDATE_DOCUMENTS
+      if @options[:message].text == Config::BotCommands::UPDATE_DOCUMENTS
         @invoker.execute(UpdateDocumentsCommand.new(@receiver))
       end
-      if @options[:message].text == CfgConst::BotCommands::UPDATE_LINK
-        @invoker.execute(UpdateLinkCommand.new(@receiver))
-      end
-      if @options[:message].text == CfgConst::BotCommands::SET_ALERT
+      @invoker.execute(UpdateLinkCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::UPDATE_LINK
+      if @options[:message].text == Config::BotCommands::SET_ALERT
         @invoker.execute(SetAlertAmountCommand.new(@receiver))
       end
       case @verification
-      when CfgConst::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
-      when CfgConst::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))
-      when CfgConst::AdminStatus::ADD_SUBJECT    then @invoker.execute(AddSubjectAction.new(@receiver))
-      when CfgConst::AdminStatus::DELETE_SUBJECT then @invoker.execute(DeleteSubjectAction.new(@receiver))
-      when CfgConst::AdminStatus::UPDATE_LINK    then @invoker.execute(UpdatLinkAction.new(@receiver))
-      when CfgConst::AdminStatus::SET_ALERT      then @invoker.execute(SetAlertAction.new(@receiver))
+      when Config::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
+      when Config::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))
+      when Config::AdminStatus::ADD_SUBJECT    then @invoker.execute(AddSubjectAction.new(@receiver))
+      when Config::AdminStatus::DELETE_SUBJECT then @invoker.execute(DeleteSubjectAction.new(@receiver))
+      when Config::AdminStatus::UPDATE_LINK    then @invoker.execute(UpdatLinkAction.new(@receiver))
+      when Config::AdminStatus::SET_ALERT      then @invoker.execute(SetAlertAction.new(@receiver))
       end
     end
   end
