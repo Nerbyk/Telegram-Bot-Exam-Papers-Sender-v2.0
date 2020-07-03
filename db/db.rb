@@ -137,9 +137,9 @@ module Db
     def get_position_in_queue(user_id:)
       counter = 0
       dataset.each do |row|
-        counter += 1 if row[:status] == Status::IN_PROGRESS && row[:user_id] != id
-        return false if row[:status] == Status::REVIEWING && row[:user_id] == id
-        return counter if row[:status] == Status::IN_PROGRESS && row[:user_id] == id
+        counter += 1 if row[:status] == Config::Status::IN_PROGRESS && row[:user_id] != user_id
+        return false if row[:status] == Config::Status::REVIEWING && row[:user_id] == user_id
+        return counter if row[:status] == Config::Status::IN_PROGRESS && row[:user_id] == user_id
       end
       counter
     end
