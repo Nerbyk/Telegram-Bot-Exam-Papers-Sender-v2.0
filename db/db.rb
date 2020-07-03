@@ -124,6 +124,10 @@ module Db
       return_array
     end
 
+    def get_admin_name(user_id:)
+      dataset.where(user_id: user_id).first[:user_name]
+    end
+
     def delete_admin(user_id)
       dataset.where(user_id: user_id).update(role: Config::Roles::USER)
     rescue StandardError
@@ -142,6 +146,16 @@ module Db
         return counter if row[:status] == Config::Status::IN_PROGRESS && row[:user_id] == user_id
       end
       counter
+    end
+
+    def get_queued_user(admin_name:)
+      if dataset.where(status: Config::Status::REVIEWING + ' ' + admin_name).first.nil?
+        return false if dataset.where(status: Config::Status::IN_PROGRESS).first.nil?
+
+        dataset.where(status: Config::Status::IN_PROGRESS).first
+      else
+        dataset.where(status: Config::Status::REVIEWING + ' ' + admin_name).first
+      end
     end
 
     private
@@ -214,6 +228,14 @@ module Db
 
     def get_user_data(user_id:)
       dataset.where(user_id: user_id).first
+    end
+
+    def get_name(name:)
+      dataset.where(name: name, status: Config::Status::ACCEPTED).first
+    end
+
+    def get_link(link:)
+      dataset.where(link: link, status: Config::Status::ACCEPTED).first
     end
 
     private
