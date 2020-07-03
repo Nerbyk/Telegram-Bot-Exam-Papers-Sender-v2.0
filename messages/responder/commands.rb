@@ -95,3 +95,10 @@ class FormFillingAction < Command
     request.user_form_filling
   end
 end
+
+# Moderator Commands 
+class InspectNostrCommand < Command 
+  def execute 
+    request.inspect_nostr
+  end
+end

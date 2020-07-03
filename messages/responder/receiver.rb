@@ -5,6 +5,7 @@ require './messages/responder/receiver_helper.rb'
 require './messages/responder/receiver_modules/admin_commands.rb'
 require './messages/responder/receiver_modules/admin_actions.rb'
 require './actions/input_validation/check_input.rb'
+require './actions/user_validation/check_matches.rb'
 
 class Receiver
   attr_reader :bot, :message, :my_text
@@ -37,7 +38,31 @@ class Receiver
   # include UserCommands
 
   # include ModeratorCommands
-
+  def inspect_nostr
+    admin_name = Db::User.instance.get_admin_name(user_id: message.from.id)
+    inspectable_user = Db::User.instance.get_queued_user(admin_name: admin_name)
+    unless inspectable_user
+      send_message(text: 'no_requests')
+      sleep(1)
+      call_menu
+      return
+    end
+    inspectable_user_name = if inspectable_user[:user_name].nil?
+                              'N/A'
+                            else
+                              "@#{inspectable_user[:user_name]}"
+                            end
+    inspectable_user_id = inspectable_user[:user_id]
+    Db::User.instance.set_status(status: Config::Status::REVIEWING + ' ' + admin_name,
+                                 user_id: inspectable_user_id)
+    user_data = Db::UserMessage.instance.get_user_data(user_id: inspectable_user_id)
+    demonstrate_msg = inspectable_user_id.to_s + "\nTG ID: " +
+                      inspectable_user_name + "\nИмя и Фамилия: " +
+                      user_data[:name] + "\nСсылка ВК: " +
+                      user_data[:link] + "\nПредметы: " + user_data[:subjects].gsub(';', ' ')
+    ValidateUser.check_data_matches(data: user_data)
+    send_message(text: 'request', additional_text: demonstrate_msg)
+  end
   # include DeveloperCommands
   # user panel
 
@@ -54,6 +79,6 @@ class Receiver
 
   # Moderator commands
   def moderator_start
-    p 'started by moderator'
+    send_message(text: 'greeting_menu')
   end
 end

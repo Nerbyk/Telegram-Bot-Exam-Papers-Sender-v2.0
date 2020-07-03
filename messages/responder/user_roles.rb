@@ -69,6 +69,11 @@ end
 class Moderator < UserRole
   def execute
     super
+    if @options[:message]
+      if @options[:message].text == Config::BotCommands::INSPECT_NOST 
+        @invoker.execute(InspectNostrCommand.new(@receiver))
+      end
+    end
   end
 end
 
