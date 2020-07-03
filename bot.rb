@@ -12,18 +12,21 @@ require './services/req_amount_observer.rb'
 Dotenv.load('./.env')
 
 Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
+  BotOptions.instance.bot = bot
   bot.listen do |message|
     options = { bot: bot, message: message }
     # begin
+    puts("bot #{BotOptions.instance.bot}")
     case message
     when Telegram::Bot::Types::CallbackQuery
       ButtonResponder.new(options: options).respond
     else
       MessageResponder.new(options: options).respond if message.chat.type != 'channel' # restrict access to channels
     end
-    rescue StandardError => e
-       p e
-       p message.from.id
-       p message.from.username
+    #  rescue StandardError => e
+    #    p e
+    #    p message.from.id
+    #    p message.from.username
+    #  end
   end
 end
