@@ -2,9 +2,17 @@
 
 require 'singleton'
 
-module BotOptions
-  def send_message(text:, markup: nil, additional_text: '')
-    bot.api.send_message(chat_id: message.from.id,
+class BotOptions
+  include Singleton
+  attr_accessor :bot
+  def initialize
+    @bot = "bot wasn't initialized"
+  end
+end
+
+module BotActions
+  def send_message(chat_id: message.from.id, text:, markup: nil, additional_text: '')
+    bot.api.send_message(chat_id: chat_id,
                          text: my_text.reply(text) + additional_text,
                          reply_markup: markup)
   end
