@@ -16,14 +16,17 @@ module Config
   end
 
   class BotCommands
-    START = '/start'
-    STOP = '/reset'
-    MANAGE_ADMINS = '/manage_admins'
+    START            = '/start'
+    STOP             = '/reset'
+    MANAGE_ADMINS    = '/manage_admins'
     UPDATE_DOCUMENTS = '/update_documents'
-    UPDATE_LINK = '/change_links'
-    SET_ALERT   = '/amount_to_alert'
-    USER_STATUS = '/status'
-    REQ_IN_REVIEW = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
+    UPDATE_LINK      = '/change_links'
+    SET_ALERT        = '/amount_to_alert'
+    INSPECT_NOST     = '/inspect_nostr'
+    INSPECT_BRH      = '/inspect_baraholka'
+    AMOUNT           = '/amount'
+    USER_STATUS      = '/status'
+    REQ_IN_REVIEW    = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
   end
 
   class Roles
