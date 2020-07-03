@@ -15,14 +15,14 @@ class ButtonResponder < MessageResponder # to inherit initialization, especially
 
   def respond
     case  @message.data
-    when  CfgConst::BotButtons::ADD_ADMIN then @invoker.execute(AddAdminButton.new(@receiver))
-    when  CfgConst::BotButtons::DELETE_ADMIN then @invoker.execute(DeleteAdminButton.new(@receiver))
-    when  CfgConst::BotButtons::ADD_SUBJECT then @invoker.execute(AddSubjectButton.new(@receiver))
-    when  CfgConst::BotButtons::EDIT_SUBJECT then @invoker.execute(EditSubjectButton.new(@receiver))
-    when  CfgConst::BotButtons::START_NOSTR then @invoker.execute(StartNostrButton.new(@receiver))
-    when  CfgConst::BotButtons::START_AD then @invoker.execute(StartAdButton.new(@receiver))
-    when  CfgConst::BotButtons::SEND_REQ then @invoker.execute(SendRequestButton.new(@receiver))
-    when  CfgConst::BotButtons::RESET_REQ then @invoker.execute(ResetRequestButton.new(@receiver))
+    when  Config::BotButtons::ADD_ADMIN then @invoker.execute(AddAdminButton.new(@receiver))
+    when  Config::BotButtons::DELETE_ADMIN then @invoker.execute(DeleteAdminButton.new(@receiver))
+    when  Config::BotButtons::ADD_SUBJECT then @invoker.execute(AddSubjectButton.new(@receiver))
+    when  Config::BotButtons::EDIT_SUBJECT then @invoker.execute(EditSubjectButton.new(@receiver))
+    when  Config::BotButtons::START_NOSTR then @invoker.execute(StartNostrButton.new(@receiver))
+    when  Config::BotButtons::START_AD then @invoker.execute(StartAdButton.new(@receiver))
+    when  Config::BotButtons::SEND_REQ then @invoker.execute(SendRequestButton.new(@receiver))
+    when  Config::BotButtons::RESET_REQ then @invoker.execute(ResetRequestButton.new(@receiver))
     end
   end
 end
