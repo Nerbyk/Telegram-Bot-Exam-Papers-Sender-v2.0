@@ -49,7 +49,8 @@ class ButtonReceiver
     delete_markup
     AmountOfRequests.instance.log
     Db::User.instance.set_status(status: Config::Status::IN_PROGRESS, user_id: message.from.id.to_s)
-    Form.new(options: @options).start
+    send_message(text: 'request_sent')
+    # Form.new(options: @options).start
   end
 
   def reset_user_request
