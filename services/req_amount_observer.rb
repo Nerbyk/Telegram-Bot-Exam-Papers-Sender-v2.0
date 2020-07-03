@@ -8,10 +8,18 @@ class Notifier
 
   private
 
+  include BotActions
   def invoke_admin
-    p 'all admins must be invoked'
-    # TODO: Send invokation message to all moderators and admins
-    # parse admins id's via get_admin method and send message via loop
+    get_admins.each do |admin_id|
+      # send_message(chat_id: admin_id, text: 'notification_requests', additional_text: AmountOfRequests.instance.current)
+      puts "chat_id: #{admin_id}, text: 'notification_requests', additional_text: #{AmountOfRequests.instance.current}"
+    end
+  end
+
+  def get_admins
+    admins = Db::User.instance.get_admins << [12_345, 'NameNick']
+    admins = admins.map(&:first)
+    admins << ENV['ADMIN_ID']
   end
 end
 
@@ -23,13 +31,15 @@ class AmountOfRequests
   attr_reader :current, :target
   def initialize
     @current = Db::User.instance.get_amount_in_queue
-    @target = CfgConst::Alert.instance.amount
+    @target = Config::Alert.instance.amount
+    puts("target = #{@target}")
+    puts("@current = #{@current}")
     add_observer(Notifier.new)
   end
 
   def log
     @current += 1
     changed
-    notify_observers(self, 1)
+    notify_observers
   end
 end
