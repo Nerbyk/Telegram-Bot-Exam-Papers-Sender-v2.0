@@ -231,11 +231,11 @@ module Db
     end
 
     def get_name(name:)
-      dataset.where(name: name, status: Config::Status::ACCEPTED).first
+      dataset.join_table(:left, :user_config).where(name: name, status: Config::Status::ACCEPTED).first
     end
 
     def get_link(link:)
-      dataset.where(link: link, status: Config::Status::ACCEPTED).first
+      dataset.join_table(:left, :user_config).where(link: link, status: Config::Status::ACCEPTED).first
     end
 
     private
