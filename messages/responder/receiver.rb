@@ -6,6 +6,7 @@ require './messages/responder/receiver_modules/admin_commands.rb'
 require './messages/responder/receiver_modules/admin_actions.rb'
 require './actions/input_validation/check_input.rb'
 require './actions/user_validation/check_matches.rb'
+require './actions/telegrpah_article.rb'
 
 class Receiver
   attr_reader :bot, :message, :my_text
@@ -47,21 +48,26 @@ class Receiver
       call_menu
       return
     end
-    inspectable_user_name = if inspectable_user[:user_name].nil?
-                              'N/A'
-                            else
-                              "@#{inspectable_user[:user_name]}"
-                            end
     inspectable_user_id = inspectable_user[:user_id]
     Db::User.instance.set_status(status: Config::Status::REVIEWING + ' ' + admin_name,
                                  user_id: inspectable_user_id)
     user_data = Db::UserMessage.instance.get_user_data(user_id: inspectable_user_id)
-    demonstrate_msg = inspectable_user_id.to_s + "\nTG ID: " +
-                      inspectable_user_name + "\nИмя и Фамилия: " +
-                      user_data[:name] + "\nСсылка ВК: " +
-                      user_data[:link] + "\nПредметы: " + user_data[:subjects].gsub(';', ' ')
-    ValidateUser.check_data_matches(data: user_data)
-    send_message(text: 'request', additional_text: demonstrate_msg)
+    request_text = "\tЗаявка №#{inspectable_user_id}\nTG ID: <a href=\"tg://user?id=#{inspectable_user_id}\">#{inspectable_user_id}</a>\nИмя и Фамилия: #{user_data[:name]}\nСсылка ВК: #{user_data[:link]}\nПредметы: #{user_data[:subjects].gsub(';', ' ')}"
+
+    matches_warning_text = "\n\n"
+    matched_name, matched_link = ValidateUser.check_data_matches(data: user_data)
+    p matched_name
+    p matched_link
+    if matched_link || matched_name
+      links_to_articles = GenerateArticleLink.new(matched_name, matched_link).create_article
+      if links_to_articles.is_a?(Array)
+        matches_warning_text += "<b>Имя пользователя совпало с другой заявкой!</b> - <a href=\"#{links_to_articles.first}\">Посмотреть Заявку</a>\n" +
+                                "<b>Ссылка на ва совпала с другой заявкой!</b> - <a href=\"#{links_to_articles.last}\">Посмотреть Заявку</a>\n"
+      elsif links_to_articles.is_a?(Sttring)
+        matches_warning_text += "<b>Имя пользователя или ВК совпало с другой заявкой!</b> - <a href=\"#{links_to_articles.first}\">Посмотреть Заявку</a>\n"
+      end
+    end
+    send_photo_parse_mode(text: request_text + matches_warning_text, photo: user_data[:photo].split(';').first)
   end
   # include DeveloperCommands
   # user panel
