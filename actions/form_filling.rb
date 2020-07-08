@@ -96,8 +96,10 @@ class Form
     end
 
     if CheckUserInput.check_photo_format(input: user_input)
-      photo = bot.api.get_updates.dig('result', 0, 'message', 'photo', -1, 'file_id')
-      Db::UserMessage.instance.set_photo(user_id: @user_id, photo: photo)
+      file_id = bot.api.get_updates.dig('result', 0, 'message', 'photo', -1, 'file_id')
+      file = bot.api.get_file(file_id: file_id)
+      file_path = file.dig('result', 'file_path')
+      Db::UserMessage.instance.set_photo(user_id: @user_id, photo: file_id + ';' + file_path)
       acceptance_step_markup
     else
       send_message(text: 'get_user_info_image_error')
@@ -157,7 +159,7 @@ class Form
     markup = MakeInlineMarkup.new(['Отправить Заявку', Config::BotButtons::SEND_REQ],
                                   ['Заполнить Заного', Config::BotButtons::RESET_REQ]).get_markup
     user_data = Db::UserMessage.instance.get_user_data(user_id: @user_id)
-    photo = user_data[:photo]
+    photo = user_data[:photo].split(';').first
     user_info = 'Имя и Фамилия: ' + user_data[:name] + "\n" + 'Предметы: ' + user_data[:subjects].split(';').join(' ')
     send_photo(text: 'acceptance_step_show_info',
                additional_text: user_info,
