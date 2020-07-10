@@ -23,8 +23,7 @@ class Receiver
   include AdminActions
 
   def user_start
-    markup = MakeInlineMarkup.new(['Билеты к Нострификации', Config::BotButtons::START_NOSTR],
-                                  ['Объявление Барахолка', Config::BotButtons::START_AD]).get_markup
+    markup = MakeInlineMarkup.new(['Билеты к Нострификации', Config::BotButtons::START_NOSTR]).get_markup
     send_message(text: 'greeting_first_time_user', markup: markup)
   end
 
@@ -56,18 +55,20 @@ class Receiver
 
     matches_warning_text = "\n\n"
     matched_name, matched_link = ValidateUser.check_data_matches(data: user_data)
-    p matched_name
-    p matched_link
     if matched_link || matched_name
       links_to_articles = GenerateArticleLink.new(matched_name, matched_link).create_article
       if links_to_articles.is_a?(Array)
         matches_warning_text += "<b>Имя пользователя совпало с другой заявкой!</b> - <a href=\"#{links_to_articles.first}\">Посмотреть Заявку</a>\n" +
                                 "<b>Ссылка на ва совпала с другой заявкой!</b> - <a href=\"#{links_to_articles.last}\">Посмотреть Заявку</a>\n"
-      elsif links_to_articles.is_a?(Sttring)
-        matches_warning_text += "<b>Имя пользователя или ВК совпало с другой заявкой!</b> - <a href=\"#{links_to_articles.first}\">Посмотреть Заявку</a>\n"
+      elsif links_to_articles.is_a?(String)
+        puts links_to_articles
+        matches_warning_text += "<b>Имя пользователя или ВК совпало с другой заявкой!</b> - <a href=\"#{links_to_articles}\">Посмотреть Заявку</a>\n"
       end
     end
-    send_photo_parse_mode(text: request_text + matches_warning_text, photo: user_data[:photo].split(';').first)
+    markup = MakeInlineMarkup.new(['Одобрить', Config::BotButtons::ACCEPT_REQ], ['Отказать', Config::BotButtons::DENY_REQ], ['Забанить', Config::BotButtons::BAN_REQ], ['Вернуться в Главное меню', Config::BotButtons::MENU]).get_markup
+    send_photo_parse_mode(text: request_text + matches_warning_text,
+                          photo: user_data[:photo].split(';').first,
+                          markup: markup)
   end
   # include DeveloperCommands
   # user panel
