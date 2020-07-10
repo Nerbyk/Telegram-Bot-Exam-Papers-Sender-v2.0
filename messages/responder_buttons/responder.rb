@@ -23,6 +23,10 @@ class ButtonResponder < MessageResponder # to inherit initialization, especially
     when  Config::BotButtons::START_AD then @invoker.execute(StartAdButton.new(@receiver))
     when  Config::BotButtons::SEND_REQ then @invoker.execute(SendRequestButton.new(@receiver))
     when  Config::BotButtons::RESET_REQ then @invoker.execute(ResetRequestButton.new(@receiver))
+    when Config::BotButtons::ACCEPT_REQ then @invoker.execute(AcceptRequesButton.new(@receiver))
+    when Config::BotButtons::DENY_REQ then @invoker.execute(DenyRequesButton.new(@receiver))
+    when Config::BotButtons::BAN_REQ then @invoker.execute(BanRequesButton.new(@receiver))
+    when Config::BotButtons::MENU then @invoker.execute(ReturnToMenuButton.new(@receiver))
     end
   end
 end
