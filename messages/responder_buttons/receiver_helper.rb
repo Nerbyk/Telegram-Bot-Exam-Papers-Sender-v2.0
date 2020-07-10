@@ -13,7 +13,7 @@ class ReceiverButtonHelper
   def self.markup_string(list_from_db)
     array_for_inline = []
     list_from_db.each do |row|
-      array_for_inline << [row.first]
+      array_for_inline << [row.first.to_s]
     end
     markup = MakeInlineMarkup.new(*array_for_inline).get_board
     [markup, array_for_inline]
