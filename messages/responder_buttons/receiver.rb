@@ -40,6 +40,35 @@ class ButtonReceiver
     Db::User.instance.set_status(status: Config::AdminStatus::DELETE_SUBJECT, user_id: message.from.id.to_s)
   end
 
+  def accept_request
+    delete_markup
+    admin_name = Db::User.instance.get_admin_name(user_id: message.from.id)
+    inspectable_user = Db::User.instance.get_queued_user(admin_name: admin_name)
+    subjects = Db::UserMessage.instance.get_user_data(user_id: inspectable_user[:user_id])[:subjects].split(';')
+    subjects.each do |subject|
+      message_id = Db::FileConfig.instance.get_message_id(subject: subject).to_i
+      forward_message(chat_id: inspectable_user[:user_id].to_i,
+                      from_chat_id: ENV['ADMIN_ID'],
+                      message_id: message_id)
+    end
+    send_message(chat_id: inspectable_user[:user_id].to_i, text: 'inpect_accept_message_to_user')
+    Db::User.instance.set_status(status: Config::Status::ACCEPTED,
+                                 user_id: inspectable_user[:user_id])
+    Invoker.new.execute(InspectNostrCommand.new(Receiver.new(options: @options)))
+  end
+
+  def deny_request
+    p 'deny pushed'
+  end
+
+  def ban_request
+    p 'ban pushed'
+  end
+
+  def return_to_menu
+    call_menu
+  end
+
   # user buttons
   def start_nostrification
     Form.new(options: @options).start
