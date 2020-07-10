@@ -8,7 +8,7 @@ class GenerateArticleLink
   end
 
   def create_article
-    return_links = matched_requests.map do |request|
+    return_links = matched_requests.compact.map do |request|
       user_id = request[:user_id]
       user_name = request[:name]
       user_link = request[:link]
@@ -24,7 +24,7 @@ class GenerateArticleLink
                                 {\"tag\":\"p\", \"children\":[\"Дата Подачи: #{request_data}\nИмя и Фамилия: #{user_name}\nСсылка ВК: #{user_link}\nПредметы: #{user_subjects}\"]}]")
       page['url']
     end
-    return_links
+    return_links.length == 1 ? return_links.first : return_links
   end
 
   private
