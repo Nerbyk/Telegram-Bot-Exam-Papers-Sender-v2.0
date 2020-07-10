@@ -12,6 +12,10 @@ module Config
     START_AD     = 'Start Ad'
     SEND_REQ     = 'Send Request'
     RESET_REQ    = 'Reset Requet'
+    ACCEPT_REQ   = 'Accept Request'
+    DENY_REQ     = 'Deny Request'
+    BAN_REQ      = 'Ban Request'
+    MENU         = 'Return to Menu'
     END_INPUT    = 'Закончить Ввод'
   end
 
@@ -26,6 +30,7 @@ module Config
     INSPECT_BRH      = '/inspect_baraholka'
     AMOUNT           = '/amount'
     USER_STATUS      = '/status'
+    ADMIN_SETTING    = '/settings'
     REQ_IN_REVIEW    = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
   end
 
