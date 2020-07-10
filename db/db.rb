@@ -67,6 +67,10 @@ module Db
       false
     end
 
+    def get_message_id(subject:)
+      dataset.where(subject: subject).first[:message_id]
+    end
+
     private
 
     def create
@@ -108,7 +112,7 @@ module Db
       new_role = Config::Roles::MODERATOR
       # initialize new user, if not created
       get_user_info(user_id: input.first, user_name: input.last, role: new_role)
-      dataset.where(user_id: input.first).update(role: new_role)
+      dataset.where(user_id: input.first).update(role: new_role, user_name: input.last)
     end
 
     def get_admins
@@ -231,11 +235,11 @@ module Db
     end
 
     def get_name(name:)
-      dataset.join_table(:left, :user_config).where(name: name, status: Config::Status::ACCEPTED).first
+      dataset.join(:user_config, user_id: :user_id).where(name: name, status: Config::Status::ACCEPTED).first
     end
 
     def get_link(link:)
-      dataset.join_table(:left, :user_config).where(link: link, status: Config::Status::ACCEPTED).first
+      dataset.join(:user_config, user_id: :user_id).where(link: link, status: Config::Status::ACCEPTED).first
     end
 
     private
