@@ -25,4 +25,8 @@ module AdminCommands
     send_message(text: 'set_alert', additional_text: Config::Alert.instance.amount.to_s)
     Db::User.instance.set_status(status: Config::AdminStatus::SET_ALERT, user_id: message.from.id.to_s)
   end
+
+  def settings
+    send_message(text: 'settings')
+  end
 end
