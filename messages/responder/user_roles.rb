@@ -48,6 +48,13 @@ class Admin < UserRole
       if @options[:message].text == Config::BotCommands::SET_ALERT
         @invoker.execute(SetAlertAmountCommand.new(@receiver))
       end
+
+      if @options[:message].text == Config::BotCommands::INSPECT_NOST
+        @invoker.execute(InspectNostrCommand.new(@receiver))
+      end
+
+      @invoker.execute(SettingsCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::ADMIN_SETTING
+
       case @verification
       when Config::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
       when Config::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))
@@ -70,7 +77,7 @@ class Moderator < UserRole
   def execute
     super
     if @options[:message]
-      if @options[:message].text == Config::BotCommands::INSPECT_NOST 
+      if @options[:message].text == Config::BotCommands::INSPECT_NOST
         @invoker.execute(InspectNostrCommand.new(@receiver))
       end
     end
