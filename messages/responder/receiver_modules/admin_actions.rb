@@ -5,8 +5,9 @@ module AdminActions
     text = message.text.split(' ')
     ReceiverButtonHelper.check_db_string(text) ? true : raise('Input check failed')
   rescue Exception => e
-    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: input, exception: e.inspect)
+    Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: message, exception: e.inspect)
     send_message(text: 'manage_admins_error')
+    Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   else
     Db::User.instance.add_admin(input: text)
     call_menu
@@ -26,6 +27,7 @@ module AdminActions
       call_menu
     else
       send_message(text: 'manage_admins_error')
+      Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
     end
     # TODO: After including inspect_request block
     # change state, if a request is inspecting by this admin
@@ -42,6 +44,7 @@ module AdminActions
   rescue StandardError => e
     Db::ErrorLog.instance.log_error(level: inspect + '=>' + caller[0][/`.*'/][1..-2], message: user_message, exception: e.inspect)
     send_message(text: 'update_document_subject_failed')
+    Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   else
     send_message(text: 'update_document_subject_succeed')
     sleep(1)
@@ -56,6 +59,7 @@ module AdminActions
       unless Db::FileConfig.instance.delete_subject(to_edit)
         markup = MakeInlineMarkup.delete_board
         send_message(text: 'update_document_subject_failed', markup: markup)
+        Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
         return
       end
       markup = MakeInlineMarkup.delete_board
@@ -65,6 +69,7 @@ module AdminActions
     else
       markup = MakeInlineMarkup.delete_board
       send_message(text: 'update_document_subject_failed', markup: markup)
+      Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
     end
   end
 
@@ -76,6 +81,7 @@ module AdminActions
       call_menu
     else
       send_message(text: 'change_link_fail')
+      Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
     end
   end
 
@@ -92,5 +98,6 @@ module AdminActions
   rescue Exception => e
     Db::ErrorLog.instance.log_error(level: '/amount_to_alert', message: message, exception: e.class.to_s)
     send_message(text: 'set_alert_error')
+    Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   end
 end
