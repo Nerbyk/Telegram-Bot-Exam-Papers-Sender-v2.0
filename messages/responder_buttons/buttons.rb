@@ -37,6 +37,26 @@ class EditSubjectButton < Button
   end
 end
 
+class AcceptRequesButton < Button
+  def execute
+    request.accept_request
+  end
+end
+class DenyRequesButton < Button
+  def execute
+    request.deny_request
+  end
+end
+class BanRequesButton < Button
+  def execute
+    request.ban_request
+  end
+end
+class ReturnToMenuButton < Button
+  def execute
+    request.return_to_menu
+  end
+end
 # User Buttons
 
 class StartNostrButton < Button
