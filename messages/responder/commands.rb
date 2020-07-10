@@ -88,6 +88,12 @@ class SetAlertAction < Command
   end
 end
 
+class SettingsCommand < Command
+  def execute
+    request.settings
+  end
+end
+
 # User Commands
 
 class FormFillingAction < Command
@@ -96,9 +102,9 @@ class FormFillingAction < Command
   end
 end
 
-# Moderator Commands 
-class InspectNostrCommand < Command 
-  def execute 
+# Moderator Commands
+class InspectNostrCommand < Command
+  def execute
     request.inspect_nostr
   end
 end
