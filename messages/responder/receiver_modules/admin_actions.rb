@@ -49,6 +49,7 @@ module AdminActions
     Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   else
     send_message(text: 'update_document_subject_succeed')
+    return_users_to_subject_step
     sleep(1)
     call_menu
   end
@@ -66,6 +67,7 @@ module AdminActions
       end
       markup = MakeInlineMarkup.delete_board
       send_message(text: 'update_document_deleted', markup: markup)
+      return_users_to_subject_step
       sleep(1)
       call_menu
     else
@@ -111,5 +113,9 @@ module AdminActions
     Db::User.instance.set_status(user_id: message.from.id, status: Config::AdminStatus::MENU)
     send_message(chat_id: user_id, text: 'inpect_deny_message_to_user', additional_text: reason)
     Invoker.new.execute(InspectNostrCommand.new(Receiver.new(options: @options)))
+  end
+
+  def return_users_to_subject_step
+    Db::User.instance.return_to_subject
   end
 end
