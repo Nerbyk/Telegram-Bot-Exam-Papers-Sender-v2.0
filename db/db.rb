@@ -90,6 +90,28 @@ module Db
       @table        = :user_config
       @dataset      = create
       @default_role = Config::Roles::USER
+      initialize_admin 
+      # initialize_dev
+    end
+
+    def initialize_admin
+      create_users = dataset.where(user_id: ENV['ADMIN_ID'])
+      if create_users.update(user_id: ENV['ADMIN_ID']) != 1 
+        dataset.insert(user_id: ENV['ADMIN_ID'], 
+                       user_name: 'Admin',
+                       role: Config::Roles::ADMIN,
+                       status: Config::AdminStatus::MENU)
+      end
+    end
+
+    def initialize_dev 
+      create_users = dataset.where(user_id: ENV['DEV_ID'])
+      if create_users.update(user_id: ENV['DEV_ID']) != 1 
+        dataset.insert(user_id: ENV['DEV_ID'], 
+                       user_name: 'Developer',
+                       role: Config::Roles::DEV,
+                       status: Config::AdminStatus::MENU)
+      end
     end
 
     def get_user_info(user_id:, user_name:, role: default_role)
@@ -166,11 +188,10 @@ module Db
 
     def create
       DB.create_table? table do
-        primary_key :user_id
+        primary_key :user_id, keep_order: false
         String :user_name
         String :role
         String :status
-        index :user_id, unique: true
       end
       DB[table]
     end
