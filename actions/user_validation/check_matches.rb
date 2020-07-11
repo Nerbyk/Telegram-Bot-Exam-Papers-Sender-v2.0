@@ -6,6 +6,7 @@ class ValidateUser
     link = data[:link]
     name = Db::UserMessage.instance.get_name(name: name)
     link = Db::UserMessage.instance.get_link(link: link)
+    
     if name && link
       [name, link]
     elsif name && !link

@@ -1,13 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.0)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
+    concurrent-ruby (1.1.6)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.3)
@@ -21,6 +21,10 @@ GEM
       faraday_middleware
       multi_json
     hashie (4.1.0)
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
+    i18n (1.8.3)
+      concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     inflecto (0.0.2)
     jwt (2.2.1)
@@ -33,15 +37,10 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+    observer (0.1.0)
     oj (3.10.6)
-    parallel (1.19.1)
-    parser (2.7.1.3)
-      ast (~> 2.4.0)
     rack (2.2.2)
-    rainbow (3.0.0)
-    regexp_parser (1.7.0)
     requests (1.0.2)
-    rexml (3.2.4)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -55,26 +54,17 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.3)
-    rubocop (0.85.0)
-      parallel (~> 1.10)
-      parser (>= 2.7.0.1)
-      rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 1.7)
-      rexml
-      rubocop-ast (>= 0.0.3)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.0.3)
-      parser (>= 2.7.0.1)
-    ruby-progressbar (1.10.1)
+    russian (0.6.0)
+      i18n (>= 0.5.0)
     sequel (5.33.0)
     sqlite3 (1.4.2)
     telegram-bot-ruby (0.12.0)
       faraday
       inflecto
       virtus
+    telegraph-ruby (0.1.3)
+      httparty (~> 0.14.0)
     thread_safe (0.3.6)
-    unicode-display_width (1.7.0)
     virtus (1.0.5)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
@@ -94,12 +84,14 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv (~> 2.1, >= 2.1.1)
+  observer (~> 0.1.0)
   requests (~> 1.0)
   rspec (~> 3.9)
-  rubocop
+  russian (~> 0.6.0)
   sequel (~> 5.31)
   sqlite3 (~> 1.3, >= 1.3.11)
   telegram-bot-ruby (~> 0.12.0)
+  telegraph-ruby (~> 0.1.3)
   vkontakte_api (~> 1.4, >= 1.4.4)
 
 BUNDLED WITH
