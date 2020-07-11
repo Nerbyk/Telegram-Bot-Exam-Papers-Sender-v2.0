@@ -37,7 +37,7 @@ module Config
   class Roles
     ADMIN = 'admin'
     USER  = 'user'
-    DEV   = 'dev'
+    DEV   = 'developer'
     MODERATOR = 'moderator'
   end
 
