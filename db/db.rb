@@ -184,6 +184,10 @@ module Db
       end
     end
 
+    def return_to_subject
+      dataset.where(status: [Config::Status::SUBJECTS, Config::Status::PHOTO, Config::Status::ISCORRECT]).update(status: Config::Status::LOGGED)
+    end
+
     private
 
     def create
