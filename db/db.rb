@@ -2,7 +2,6 @@
 
 require 'singleton'
 require 'sequel'
-require 'sqlite3'
 require 'mysql2'
 require 'time'
 
