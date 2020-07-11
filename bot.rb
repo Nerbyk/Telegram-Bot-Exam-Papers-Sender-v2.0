@@ -8,11 +8,13 @@ require './messages/responder_buttons/responder.rb'
 require './config_vars/config_vars.rb'
 require './db/db.rb'
 require './services/req_amount_observer.rb'
+require './services/restart_notifier.rb'
 
 Dotenv.load('./.env')
 
 Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
   BotOptions.instance.bot = bot
+  Notifier.about_restart
   bot.listen do |message|
     options = { bot: bot, message: message }
   begin
