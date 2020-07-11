@@ -58,6 +58,7 @@ class ButtonReceiver
   end
 
   def deny_request
+    delete_markup
     admin_name = Db::User.instance.get_admin_name(user_id: message.from.id)
     inspectable_user = Db::User.instance.get_queued_user(admin_name: admin_name)
     Db::User.instance.set_status(status: Config::AdminStatus::DENY_REASON + ' ' + inspectable_user[:user_id].to_s,
@@ -66,6 +67,7 @@ class ButtonReceiver
   end
 
   def ban_request
+    delete_markup
     admin_name = Db::User.instance.get_admin_name(user_id: message.from.id)
     inspectable_user = Db::User.instance.get_queued_user(admin_name: admin_name)
     Db::User.instance.set_status(status: Config::Status::BANNED,
@@ -75,6 +77,7 @@ class ButtonReceiver
   end
 
   def return_to_menu
+    delete_markup
     call_menu
   end
 
