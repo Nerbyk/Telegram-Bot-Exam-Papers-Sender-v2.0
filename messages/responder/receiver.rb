@@ -81,7 +81,7 @@ class Receiver
 
   # Developer commands
   def developer_start
-    p 'started by developer'
+    send_message(text: 'greeting_menu')
   end
 
   # Moderator commands
