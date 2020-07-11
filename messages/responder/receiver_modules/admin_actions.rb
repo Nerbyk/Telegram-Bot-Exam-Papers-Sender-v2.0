@@ -22,6 +22,11 @@ module AdminActions
         send_message(text: 'manage_admins_error')
         return
       end
+      # returning user to queue, if moderator was reviewing the request
+      admin_name = db_data.map{|admin| admin.last if admin.include?(to_delete.to_i) }.compact.first
+      user_id = Db::User.instance.get_queued_user(admin_name: admin_name)[:user_id]
+      Db::User.instance.set_status(user_id: user_id, status: Config::Status::IN_PROGRESS)
+      # deleting board, returning to menu
       markup = MakeInlineMarkup.delete_board
       send_message(text: 'manage_admins_deleted', markup: markup)
       call_menu
@@ -29,9 +34,6 @@ module AdminActions
       send_message(text: 'manage_admins_error')
       Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
     end
-    # TODO: After including inspect_request block
-    # change state, if a request is inspecting by this admin
-    # while deleting permissions + send notification about rights
   end
 
   def add_subject_action
