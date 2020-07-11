@@ -19,7 +19,6 @@ class CheckMembership
     vk_status = vk.groups.isMember('v' => version, 'group_id' => group_id, 'user_id' => link_path.to_i)
     vk_status = vk_status == 1
     telegram_status = @options[:bot].api.getChatMember(chat_id: '@' + community_id, user_id: @user_id)
-    p telegram_status['result']['status']
     telegram_status = if telegram_status['result']['status'] == 'member' || telegram_status['result']['status'] == 'administrator'
                         true
                       else
