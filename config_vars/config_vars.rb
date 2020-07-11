@@ -62,6 +62,7 @@ module Config
     DELETE_SUBJECT = 'delete subject'
     UPDATE_LINK    = 'update link'
     SET_ALERT      = 'set alert'
+    DENY_REASON    = 'denying'
   end
 
   class Alert
