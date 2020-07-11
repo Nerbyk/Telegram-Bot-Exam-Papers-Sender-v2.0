@@ -100,4 +100,14 @@ module AdminActions
     send_message(text: 'set_alert_error')
     Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   end
+
+  def rejection_reason 
+    reason = message.text
+    user_id = Db::User.instance.get_user_info(user_id: message.from.id, user_name: message.from.username)[:status].split(' ').last.to_i
+    Db::UserMessage.instance.del_row(user_id: user_id)
+    Db::User.instance.set_status(user_id: user_id, status: Config::Status::LOGGED)
+    Db::User.instance.set_status(user_id: message.from.id, status: Config::AdminStatus::MENU)
+    send_message(chat_id: user_id, text: 'inpect_deny_message_to_user', additional_text: reason)
+    Invoker.new.execute(InspectNostrCommand.new(Receiver.new(options: @options)))
+  end
 end
