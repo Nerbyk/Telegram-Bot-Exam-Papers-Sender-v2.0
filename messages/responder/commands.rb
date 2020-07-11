@@ -94,6 +94,12 @@ class SettingsCommand < Command
   end
 end
 
+class EnterRejectionReasonAction < Command 
+  def execute 
+    request.rejection_reason
+  end
+end
+
 # User Commands
 
 class FormFillingAction < Command
