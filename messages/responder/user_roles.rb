@@ -9,12 +9,17 @@ class UserRole
     @options = options
     @receiver = Receiver.new(options: options)
     @invoker  = Invoker.new
+    @bot      = options[:bot]
+    @message  = options[:message]
   end
 
   # common comands
   def execute
     @verification = Db::User.instance.get_user_info(user_id: @options[:message].from.id.to_s,
                                                     user_name: @options[:message].from.username)[:status]
+    if @verification == Config::Status::BANNED 
+      return
+    end
     case @options[:message].text
     when Config::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
     end
@@ -23,6 +28,8 @@ end
 
 # invoker classes to command pattern
 class User < UserRole
+  include BotActions
+  attr_reader :bot, :message
   def execute
     super
     if @verification != Config::Status::LOGGED
@@ -63,6 +70,7 @@ class Admin < UserRole
       when Config::AdminStatus::UPDATE_LINK    then @invoker.execute(UpdatLinkAction.new(@receiver))
       when Config::AdminStatus::SET_ALERT      then @invoker.execute(SetAlertAction.new(@receiver))
       end
+      @invoker.execute(EnterRejectionReasonAction.new(@receiver)) if @verification.split(' ').first == Config::AdminStatus::DENY_REASON
     end
   end
 end
