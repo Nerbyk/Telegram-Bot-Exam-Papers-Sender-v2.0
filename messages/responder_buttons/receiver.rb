@@ -58,11 +58,20 @@ class ButtonReceiver
   end
 
   def deny_request
-    p 'deny pushed'
+    admin_name = Db::User.instance.get_admin_name(user_id: message.from.id)
+    inspectable_user = Db::User.instance.get_queued_user(admin_name: admin_name)
+    Db::User.instance.set_status(status: Config::AdminStatus::DENY_REASON + ' ' + inspectable_user[:user_id].to_s,
+                                 user_id: message.from.id)
+    send_message(text: 'enter_deny_reason')
   end
 
   def ban_request
-    p 'ban pushed'
+    admin_name = Db::User.instance.get_admin_name(user_id: message.from.id)
+    inspectable_user = Db::User.instance.get_queued_user(admin_name: admin_name)
+    Db::User.instance.set_status(status: Config::Status::BANNED,
+      user_id: inspectable_user[:user_id])
+    send_message_parse_mode(chat_id: inspectable_user[:user_id], text: "<b>Вы были забанены одним из администраторов. Для разбана обратитесь к </b><a href=\"tg://user?id=143845427\">Разрабочику</a>")
+    Invoker.new.execute(InspectNostrCommand.new(Receiver.new(options: @options)))
   end
 
   def return_to_menu
