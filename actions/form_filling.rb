@@ -15,8 +15,10 @@ class Form
 
   def start
     # initialize new user if not initialized and call method according to it's status
-    send(Db::User.instance.get_user_info(user_id: @user_id,
-                                         user_name: @username)[:status])
+    call_method = Db::User.instance.get_user_info(user_id: @user_id,
+                                                  user_name: @username)[:status]
+
+    send(call_method.split(' ').first)
   end
 
   def logged
@@ -107,7 +109,7 @@ class Form
   end
 
   def correctly?
-    p 'get input'
+    
   end
 
   def in_queue
@@ -122,9 +124,13 @@ class Form
     end
   end
 
-  def accepted; end
+  def accepted
+    send_message(text: 'greeting_accepted_user')
+  end
 
-  def banned; end
+  def banned
+    send_message_parse_mode(text: "<b>Вы были забанены одним из администраторов. Для разбана обратитесь к </b><a href=\"tg://user?id=143845427\">Разрабочику</a>")
+  end
 
   private
 
