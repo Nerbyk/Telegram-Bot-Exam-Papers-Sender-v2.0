@@ -1,0 +1,1 @@
+greeting_menu: "/reset_user id - reset user data to default\n/stop_user_panel - freeze user panel\n/check_logs number - check last 'number' error logs\n/get_user_request id\n/ban id - ban user by id\n/send_message id - send message to specific user\n"
