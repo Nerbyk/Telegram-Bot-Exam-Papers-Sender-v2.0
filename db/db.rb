@@ -2,7 +2,7 @@
 
 require 'singleton'
 require 'sequel'
-require 'sqlite3'
+require 'mysql2'
 require 'time'
 
 module Db
@@ -291,5 +291,5 @@ module Db
     attr_reader :dataset, :table
   end
 
-  DB = Sequel.sqlite('./db/user_config.db')
+  DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'])
 end

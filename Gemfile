@@ -13,7 +13,6 @@ gem 'rspec', '~> 3.9'
 gem 'rubocop', require: false
 gem 'russian', '~> 0.6.0'
 gem 'sequel', '~> 5.31'
-gem 'sqlite3', '~> 1.3', '>= 1.3.11'
 gem 'telegram-bot-ruby', '~> 0.12.0'
 gem 'telegraph-ruby', '~> 0.1.3'
 gem 'vkontakte_api', '~> 1.4', '>= 1.4.4'
