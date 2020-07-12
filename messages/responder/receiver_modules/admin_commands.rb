@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 module AdminCommands
-  def admin_start
-    send_message(text: 'greeting_menu')
-    Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
-  end
-
   def admin_manage_admins
     inline_buttons = ReceiverHelper.choose_option_msg(['Добавить админа', Config::BotButtons::ADD_ADMIN], ['Удалить админа', Config::BotButtons::DELETE_ADMIN])
     send_message(text: 'choose_option', markup: inline_buttons)
