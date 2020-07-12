@@ -78,6 +78,19 @@ end
 class Developer < UserRole
   def execute
     super
+    if @message.text.include?(Config::DevCommands::RESET)
+      @invoker.execute(ResetDeveloeprCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::FREEZE)
+      @invoker.execute(FreezeDeveloperCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::GET_LOGS)
+      @invoker.execute(GetLogsDeveloeprCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::REQUEST)
+      @invoker.execute(RequestDeveloeprCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::BAN)
+      @invoker.execute(BanDeveloeprCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::MESSAGE)
+      @invoker.execute(MessageDeveloeprCommand.new(@receiver))
+    end
   end
 end
 
@@ -89,6 +102,7 @@ class Moderator < UserRole
         @invoker.execute(InspectNostrCommand.new(@receiver))
       end
     end
+    @invoker.execute(EnterRejectionReasonAction.new(@receiver)) if @verification.split(' ').first == Config::AdminStatus::DENY_REASON 
   end
 end
 
