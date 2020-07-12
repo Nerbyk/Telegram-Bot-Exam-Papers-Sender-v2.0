@@ -2,7 +2,7 @@
 
 require 'singleton'
 require 'sequel'
-require 'mysql2'
+require 'sqlite3'
 require 'time'
 
 module Db
@@ -17,14 +17,22 @@ module Db
       if message.nil?
         user_info = 'n/a'
       else
+        begin   
         text = message.text
+        rescue  
+        text = "n/a"
+        end  
         username = message.from.username
         username = 'n/a' if username.nil?
         text = 'n/a' if text.nil?
         user_info = message.from.id.to_s + ' | ' + username + ' | ' + text
       end
 
-      dataset.insert(timestamp: Time.now.utc.iso8601, level: level, user_info: user_info, exception_msg: exception)
+      dataset.insert(timestamp: Time.now.utc.iso8601, level: level, user_info: user_info, exception_msg: exception) 
+    end
+
+    def return_last_logs(num:)
+      dataset.order(:timestamp).last(num)
     end
 
     private
@@ -283,5 +291,5 @@ module Db
     attr_reader :dataset, :table
   end
 
-  DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'])
+  DB = Sequel.sqlite('./db/user_config.db')
 end
