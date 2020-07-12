@@ -17,9 +17,8 @@ class UserRole
   def execute
     @verification = Db::User.instance.get_user_info(user_id: @options[:message].from.id.to_s,
                                                     user_name: @options[:message].from.username)[:status]
-    if @verification == Config::Status::BANNED 
-      return
-    end
+    return if @verification == Config::Status::BANNED
+
     case @options[:message].text
     when Config::BotCommands::START then @invoker.execute(StartCommand.new(@receiver, @options))
     end
@@ -70,7 +69,9 @@ class Admin < UserRole
       when Config::AdminStatus::UPDATE_LINK    then @invoker.execute(UpdatLinkAction.new(@receiver))
       when Config::AdminStatus::SET_ALERT      then @invoker.execute(SetAlertAction.new(@receiver))
       end
-      @invoker.execute(EnterRejectionReasonAction.new(@receiver)) if @verification.split(' ').first == Config::AdminStatus::DENY_REASON
+      if @verification.split(' ').first == Config::AdminStatus::DENY_REASON
+        @invoker.execute(EnterRejectionReasonAction.new(@receiver))
+      end
     end
   end
 end
@@ -102,7 +103,9 @@ class Moderator < UserRole
         @invoker.execute(InspectNostrCommand.new(@receiver))
       end
     end
-    @invoker.execute(EnterRejectionReasonAction.new(@receiver)) if @verification.split(' ').first == Config::AdminStatus::DENY_REASON 
+    if @verification.split(' ').first == Config::AdminStatus::DENY_REASON
+      @invoker.execute(EnterRejectionReasonAction.new(@receiver))
+    end
   end
 end
 

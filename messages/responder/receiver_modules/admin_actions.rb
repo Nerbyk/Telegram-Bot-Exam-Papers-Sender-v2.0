@@ -23,7 +23,7 @@ module AdminActions
         return
       end
       # returning user to queue, if moderator was reviewing the request
-      admin_name = db_data.map{|admin| admin.last if admin.include?(to_delete.to_i) }.compact.first
+      admin_name = db_data.map { |admin| admin.last if admin.include?(to_delete.to_i) }.compact.first
       user_id = Db::User.instance.get_queued_user(admin_name: admin_name)[:user_id]
       Db::User.instance.set_status(user_id: user_id, status: Config::Status::IN_PROGRESS)
       # deleting board, returning to menu
@@ -98,14 +98,14 @@ module AdminActions
       call_menu
     else
       raise
-      end
+    end
   rescue Exception => e
     Db::ErrorLog.instance.log_error(level: '/amount_to_alert', message: message, exception: e.class.to_s)
     send_message(text: 'set_alert_error')
     Db::User.instance.set_status(status: Config::AdminStatus::MENU, user_id: message.from.id.to_s)
   end
 
-  def rejection_reason 
+  def rejection_reason
     reason = message.text
     user_id = Db::User.instance.get_user_info(user_id: message.from.id, user_name: message.from.username)[:status].split(' ').last.to_i
     Db::UserMessage.instance.del_row(user_id: user_id)

@@ -34,7 +34,7 @@ module Config
     REQ_IN_REVIEW    = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
   end
 
-  class DevCommands 
+  class DevCommands
     RESET = '/reset_user '
     FREEZE = '/stop_user_panel'
     GET_LOGS = '/check_logs '
@@ -82,10 +82,10 @@ module Config
     end
   end
 
-  class Access 
+  class Access
     include Singleton
     attr_accessor :user
-    def initialize 
+    def initialize
       @user = false
     end
   end

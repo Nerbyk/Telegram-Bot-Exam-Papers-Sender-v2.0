@@ -94,8 +94,8 @@ class SettingsCommand < Command
   end
 end
 
-class EnterRejectionReasonAction < Command 
-  def execute 
+class EnterRejectionReasonAction < Command
+  def execute
     request.rejection_reason
   end
 end
@@ -115,7 +115,7 @@ class InspectNostrCommand < Command
   end
 end
 
-# Dev Commands 
+# Dev Commands
 
 class ResetDeveloeprCommand < Command
   def execute

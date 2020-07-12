@@ -20,9 +20,7 @@ class Receiver
     @my_text = options[:my_text]
   end
 
-  
-
-  # Admin commands 
+  # Admin commands
 
   include AdminCommands
 
@@ -61,16 +59,14 @@ class Receiver
     Form.new(options: @options).start
   end
 
-
   # Common methods
   private
 
   def call_menu
     Invoker.new.execute(StartCommand.new(Receiver.new(options: @options), @options))
   end
-  
+
   def unexpected_message
     send_message(text: 'unexpected_message')
   end
-
 end

@@ -17,18 +17,18 @@ module Db
       if message.nil?
         user_info = 'n/a'
       else
-        begin   
-        text = message.text
-        rescue  
-        text = "n/a"
-        end  
+        begin
+          text = message.text
+        rescue StandardError
+          text = 'n/a'
+        end
         username = message.from.username
         username = 'n/a' if username.nil?
         text = 'n/a' if text.nil?
         user_info = message.from.id.to_s + ' | ' + username + ' | ' + text
       end
 
-      dataset.insert(timestamp: Time.now.utc.iso8601, level: level, user_info: user_info, exception_msg: exception) 
+      dataset.insert(timestamp: Time.now.utc.iso8601, level: level, user_info: user_info, exception_msg: exception)
     end
 
     def return_last_logs(num:)
@@ -98,24 +98,24 @@ module Db
       @table        = :user_config
       @dataset      = create
       @default_role = Config::Roles::USER
-      initialize_admin 
+      initialize_admin
       # initialize_dev
     end
 
     def initialize_admin
       create_users = dataset.where(user_id: ENV['ADMIN_ID'])
-      if create_users.update(user_id: ENV['ADMIN_ID']) != 1 
-        dataset.insert(user_id: ENV['ADMIN_ID'], 
+      if create_users.update(user_id: ENV['ADMIN_ID']) != 1
+        dataset.insert(user_id: ENV['ADMIN_ID'],
                        user_name: 'Admin',
                        role: Config::Roles::ADMIN,
                        status: Config::AdminStatus::MENU)
       end
     end
 
-    def initialize_dev 
+    def initialize_dev
       create_users = dataset.where(user_id: ENV['DEV_ID'])
-      if create_users.update(user_id: ENV['DEV_ID']) != 1 
-        dataset.insert(user_id: ENV['DEV_ID'], 
+      if create_users.update(user_id: ENV['DEV_ID']) != 1
+        dataset.insert(user_id: ENV['DEV_ID'],
                        user_name: 'Developer',
                        role: Config::Roles::DEV,
                        status: Config::AdminStatus::MENU)
