@@ -20,9 +20,17 @@ Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
     begin
       case message
       when Telegram::Bot::Types::CallbackQuery
-        ButtonResponder.new(options: options).respond
+        if Config::Access.isntance.user
+          ButtonResponder.new(options: options).respond
+        elsif !Config::Access.isntance.user && (message.from.id != ENV['DEV_ID'] || message.from.id != ENV['ADMIN_ID'] )  
+          bot.api.send_message(chat_id: message.from.id, text: 'in maintenance')
+        end 
       else
-        MessageResponder.new(options: options).respond if message.chat.type != 'channel' # restrict access to channels
+        if Config::Access.isntance.user
+          MessageResponder.new(options: options).respond if message.chat.type != 'channel' # restrict access to channels
+        elsif !Config::Access.isntance.user && (message.from.id != ENV['DEV_ID'] || message.from.id != ENV['ADMIN_ID'] ) 
+          bot.api.send_message(chat_id: message.from.id, text: 'in maintenance')
+        end
       end
     rescue StandardError => exception
       Db::ErrorLog.instance.log_error(level: 'high' + '=>' + caller[0][/`.*'/][1..-2], message: message, exception: exception.inspect)

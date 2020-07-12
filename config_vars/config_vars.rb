@@ -77,7 +77,7 @@ module Config
     include Singleton
     attr_accessor :user
     def initialize 
-      @user = true
+      @user = false
     end
   end
 
