@@ -17,6 +17,12 @@ module BotActions
                          reply_markup: markup)
   end
 
+  def send_message_text(chat_id: message.from.id, text:, markup: nil, additional_text: '')
+    bot.api.send_message(chat_id: chat_id,
+                         text: text,
+                         reply_markup: markup)
+  end
+
   def send_message_parse_mode(chat_id: message.from.id, text:, markup: nil)
     bot.api.send_message(chat_id: chat_id,
                          text: text,
