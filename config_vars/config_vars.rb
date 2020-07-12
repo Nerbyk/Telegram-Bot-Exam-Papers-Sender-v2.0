@@ -73,6 +73,14 @@ module Config
     end
   end
 
+  class Access 
+    include Singleton
+    attr_accessor :user
+    def initialize 
+      @user = true
+    end
+  end
+
   class Links
     include Singleton
     attr_accessor :vk, :telegram
