@@ -83,6 +83,7 @@ class ButtonReceiver
 
   # user buttons
   def start_nostrification
+    delete_markup
     Form.new(options: @options).start
   end
 
