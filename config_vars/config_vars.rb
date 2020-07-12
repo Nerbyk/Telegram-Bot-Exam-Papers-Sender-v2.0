@@ -34,6 +34,15 @@ module Config
     REQ_IN_REVIEW    = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
   end
 
+  class DevCommands 
+    RESET = '/reset_user '
+    FREEZE = '/stop_user_panel'
+    GET_LOGS = '/check_logs '
+    REQUEST = '/get_user_request '
+    BAN = '/ban '
+    MESSAGE = '/send_message '
+  end
+
   class Roles
     ADMIN = 'admin'
     USER  = 'user'
