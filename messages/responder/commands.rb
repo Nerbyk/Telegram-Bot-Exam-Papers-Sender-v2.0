@@ -114,3 +114,41 @@ class InspectNostrCommand < Command
     request.inspect_nostr
   end
 end
+
+# Dev Commands 
+
+class ResetDeveloeprCommand < Command
+  def execute
+    request.reset_dev
+  end
+end
+
+class FreezeDeveloperCommand < Command
+  def execute
+    request.freeze_dev
+  end
+end
+
+class GetLogsDeveloeprCommand < Command
+  def execute
+    request.get_logs_dev
+  end
+end
+
+class RequestDeveloeprCommand < Command
+  def execute
+    request.request_dev
+  end
+end
+
+class BanDeveloeprCommand < Command
+  def execute
+    request.ban_dev
+  end
+end
+
+class MessageDeveloeprCommand < Command
+  def execute
+    request.message_dev
+  end
+end
