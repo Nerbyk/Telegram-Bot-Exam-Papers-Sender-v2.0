@@ -69,7 +69,7 @@ module Config
     include Singleton
     attr_accessor :amount
     def initialize
-      @amount = 2
+      @amount = ENV['DEFAULT_ALERT']
     end
   end
 
@@ -77,8 +77,8 @@ module Config
     include Singleton
     attr_accessor :vk, :telegram
     def initialize
-      @vk = 'https://vk.com/pozor.brno'
-      @telegram = 'https://t.me/pozor_brno'
+      @vk = ENV['DEFAULT_VK']
+      @telegram = ENV['DEFAULT_TG']
     end
 
     def set_new_link(link)
