@@ -10,14 +10,14 @@ require './db/db.rb'
 require './services/req_amount_observer.rb'
 require './services/restart_notifier.rb'
 require './messages/get_message.rb'
-
+include BotActions
 Dotenv.load('./.env')
 
 Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
   BotOptions.instance.bot = bot
   Notifier.about_restart
   bot.listen do |message|
-  include BotActions
+  
   my_text = GetMessageText.new(client: 'config')
     if Config::Access.instance.user
       options = { bot: bot, message: message }
