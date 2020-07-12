@@ -19,7 +19,8 @@ module AdminActions
     markup, available_buttons = ReceiverButtonHelper.markup_string(db_data)
     if available_buttons.flatten.include?(to_delete)
       unless Db::User.instance.delete_admin(to_delete)
-        send_message(text: 'manage_admins_error')
+        markup = MakeInlineMarkup.delete_board
+        send_message(text: 'manage_admins_error', markup: markup)
         return
       end
       # returning user to queue, if moderator was reviewing the request
