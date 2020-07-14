@@ -6,7 +6,7 @@ class GenerateArticleLink
   def initialize(*matched_requests)
     @matched_requests = matched_requests
     @telegraph = Telegraph.new
-    @token = telegraph.createAccount(short_name: 'PozorBot')['access_token']
+    @token = ENV['TELEGRAPH_TOKEN']
   end
 
   def create_article
