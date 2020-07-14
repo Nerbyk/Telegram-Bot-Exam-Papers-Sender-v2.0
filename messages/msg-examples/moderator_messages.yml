@@ -4,3 +4,4 @@ request: 'ID Заяки '
 inpect_accept_message_to_user: "Желаем удачи в подготовке и сдаче :3 \n\n https://telegra.ph/FAQ---PozorBrno-Bot-07-09 - Часто задаваемые вопросы (ознакомьтесь, прежде чем писать админу в ЛС)"
 enter_deny_reason: "Введи причину отказа"
 inpect_deny_message_to_user: "Отказано. Причина ниже. Попробуй заполнить анкету заново(/start).\n\nПричина: "
+amount_message: "Количество непроверенных заявок: "
