@@ -48,17 +48,17 @@ class Admin < UserRole
         @invoker.execute(ManageAdminsCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::UPDATE_DOCUMENTS
         @invoker.execute(UpdateDocumentsCommand.new(@receiver))
-      @invoker.execute(UpdateLinkCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::UPDATE_LINK
+        @invoker.execute(UpdateLinkCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::UPDATE_LINK
       elsif @options[:message].text == Config::BotCommands::SET_ALERT
         @invoker.execute(SetAlertAmountCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::INSPECT_NOST
         @invoker.execute(InspectNostrCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::ADMIN_SETTING
-        @invoker.execute(SettingsCommand.new(@receiver)) 
+        @invoker.execute(SettingsCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::AMOUNT
         @invoker.execute(AmountCommand.new(@receiver))
       end
-     
+
       case @verification
       when Config::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
       when Config::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))

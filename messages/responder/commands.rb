@@ -115,8 +115,8 @@ class InspectNostrCommand < Command
   end
 end
 
-class AmountCommand < Command 
-  def execute 
+class AmountCommand < Command
+  def execute
     request.get_requests_amount
   end
 end

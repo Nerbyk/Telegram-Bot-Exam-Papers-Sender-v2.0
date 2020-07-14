@@ -29,7 +29,7 @@ module AdminActions
         user_id = Db::User.instance.get_queued_user(admin_name: admin_name)[:user_id]
         Db::User.instance.set_status(user_id: user_id, status: Config::Status::IN_PROGRESS)
       end
-      
+
       # deleting board, returning to menu
       markup = MakeInlineMarkup.delete_board
       send_message(text: 'manage_admins_deleted', markup: markup)
