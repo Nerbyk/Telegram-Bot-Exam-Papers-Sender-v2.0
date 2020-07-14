@@ -115,6 +115,12 @@ class InspectNostrCommand < Command
   end
 end
 
+class AmountCommand < Command 
+  def execute 
+    request.get_requests_amount
+  end
+end
+
 # Dev Commands
 
 class ResetDeveloeprCommand < Command

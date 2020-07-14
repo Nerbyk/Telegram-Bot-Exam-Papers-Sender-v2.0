@@ -33,4 +33,11 @@ module ModeratorCommands
                           photo: user_data[:photo].split(';').first,
                           markup: markup)
   end
+
+  def get_requests_amount 
+    amount = Db::User.instance.get_amount_in_queue.to_s
+    send_message(text: 'amount_message', additional_text: amount)
+    sleep(1)
+    call_menu
+  end
 end

@@ -46,21 +46,19 @@ class Admin < UserRole
 
       if @options[:message].text == Config::BotCommands::MANAGE_ADMINS
         @invoker.execute(ManageAdminsCommand.new(@receiver))
-      end
-      if @options[:message].text == Config::BotCommands::UPDATE_DOCUMENTS
+      elsif @options[:message].text == Config::BotCommands::UPDATE_DOCUMENTS
         @invoker.execute(UpdateDocumentsCommand.new(@receiver))
-      end
       @invoker.execute(UpdateLinkCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::UPDATE_LINK
-      if @options[:message].text == Config::BotCommands::SET_ALERT
+      elsif @options[:message].text == Config::BotCommands::SET_ALERT
         @invoker.execute(SetAlertAmountCommand.new(@receiver))
-      end
-
-      if @options[:message].text == Config::BotCommands::INSPECT_NOST
+      elsif @options[:message].text == Config::BotCommands::INSPECT_NOST
         @invoker.execute(InspectNostrCommand.new(@receiver))
+      elsif @options[:message].text == Config::BotCommands::ADMIN_SETTING
+        @invoker.execute(SettingsCommand.new(@receiver)) 
+      elsif @options[:message].text == Config::BotCommands::AMOUNT
+        @invoker.execute(AmountCommand.new(@receiver))
       end
-
-      @invoker.execute(SettingsCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::ADMIN_SETTING
-
+     
       case @verification
       when Config::AdminStatus::ADD_ADMIN      then @invoker.execute(AddAdminAction.new(@receiver))
       when Config::AdminStatus::DELETE_ADMIN   then @invoker.execute(DeleteAdminAction.new(@receiver))
@@ -101,6 +99,8 @@ class Moderator < UserRole
     if @options[:message]
       if @options[:message].text == Config::BotCommands::INSPECT_NOST
         @invoker.execute(InspectNostrCommand.new(@receiver))
+      elsif @options[:message].text == Config::BotCommands::AMOUNT
+        @invoker.execute(AmountCommand.new(@receiver))
       end
     end
     if @verification.split(' ').first == Config::AdminStatus::DENY_REASON
