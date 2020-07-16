@@ -95,11 +95,11 @@ module Db
   class User
     include Singleton
     def initialize
-      @table        = :user_config
+      @table        = :users
       @dataset      = create
       @default_role = Config::Roles::USER
       initialize_admin
-      # initialize_dev
+      initialize_dev
     end
 
     def initialize_admin
@@ -213,7 +213,7 @@ module Db
   class UserMessage
     include Singleton
     def initialize
-      @table = :temp_info
+      @table = :user_messages
       @dataset = create
     end
 
@@ -264,22 +264,27 @@ module Db
     end
 
     def get_user_data(user_id:)
-      dataset.where(user_id: user_id).first
+      dataset.where(user_id: user_id.to_s).first
     end
 
     def get_name(name:)
-      dataset.join(:user_config, user_id: :user_id).where(name: name, status: Config::Status::ACCEPTED).first
+      dataset.join(:users, user_id: :user_id).where(name: name, status: Config::Status::ACCEPTED).first
     end
 
     def get_link(link:)
-      dataset.join(:user_config, user_id: :user_id).where(link: link, status: Config::Status::ACCEPTED).first
+      dataset.join(:users, user_id: :user_id).where(link: link, status: Config::Status::ACCEPTED).first
+    end
+
+    def get_all_requests
+      count = dataset.count
+      dataset.first(count)  
     end
 
     private
 
     def create
       DB.create_table? table do
-        foreign_key :user_id, :user_config
+        foreign_key :user_id, :users
         Date   :created
         String :name
         String :link
