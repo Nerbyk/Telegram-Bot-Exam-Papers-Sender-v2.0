@@ -23,7 +23,7 @@ class GenerateArticleLink
                                 \"children\":[
                                 {\"tag\":\"img\",\"attrs\":{\"src\":\"#{user_photo}\"}},
                                 {\"tag\":\"figcaption\",\"children\":[\"\"]}]},
-                                {\"tag\":\"p\", \"children\":[\"Дата Подачи: #{request_data}\nИмя и Фамилия: #{user_name}\nСсылка ВК: #{user_link}\nПредметы: #{user_subjects}\"]}]")
+                                {\"tag\":\"p\", \"children\":[\"Дата Подачи: #{request_data}\nИмя и Фамилия: #{user_name}\nСсылка ВК: #{user_link}\nПредметы: #{user_subjects}\n\nP.S. Если фото не отображается - это старая заявка, если очень надо - я ее вытащу.\"]}]")
       page['url']
     end
     return_links.length == 1 ? return_links.first : return_links
