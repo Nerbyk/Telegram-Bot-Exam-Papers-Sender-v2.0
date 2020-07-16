@@ -41,6 +41,7 @@ module Config
     REQUEST = '/get_user_request '
     BAN = '/ban '
     MESSAGE = '/send_message '
+    UPLOAD_PHOTOS = '/upload_photos'
   end
 
   class Roles

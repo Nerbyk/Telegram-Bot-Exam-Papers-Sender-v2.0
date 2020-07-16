@@ -54,9 +54,24 @@ module DeveloperCommands
     exception_dev(e)
   end
 
+  def upload_photos_dev
+    requests = Db::UserMessage.instance.get_all_requests
+    photo = requests.first[:photo]
+    p photo
+    p bot.api.send_photo(chat_id: message.from.id, 
+                       photo: photo)
+    
+    # requests.each do |hash|
+    #   unless hash[:photo].include?(';')
+
+    #   end
+    # end
+  end
+
   def exception_dev(e)
     send_message_text(text: "#{e.inspect}\n#{caller[0][/`.*'/][1..-2]}")
   rescue StandardError => e
     exception_dev(e)
   end
+
 end

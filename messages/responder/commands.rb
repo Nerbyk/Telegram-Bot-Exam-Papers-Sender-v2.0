@@ -158,3 +158,9 @@ class MessageDeveloeprCommand < Command
     request.message_dev
   end
 end
+
+class UploadPhotosCommand < Command 
+  def execute 
+    request.upload_photos_dev
+  end
+end

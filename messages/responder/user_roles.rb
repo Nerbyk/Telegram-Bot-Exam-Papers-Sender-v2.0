@@ -48,7 +48,8 @@ class Admin < UserRole
         @invoker.execute(ManageAdminsCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::UPDATE_DOCUMENTS
         @invoker.execute(UpdateDocumentsCommand.new(@receiver))
-        @invoker.execute(UpdateLinkCommand.new(@receiver)) if @options[:message].text == Config::BotCommands::UPDATE_LINK
+      elsif @options[:message].text == Config::BotCommands::UPDATE_LINK
+        @invoker.execute(UpdateLinkCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::SET_ALERT
         @invoker.execute(SetAlertAmountCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::INSPECT_NOST
@@ -89,6 +90,8 @@ class Developer < UserRole
       @invoker.execute(BanDeveloeprCommand.new(@receiver))
     elsif @message.text.include?(Config::DevCommands::MESSAGE)
       @invoker.execute(MessageDeveloeprCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::UPLOAD_PHOTOS)
+      @invoker.execute(UploadPhotosCommand.new(@receiver))
     end
   end
 end
