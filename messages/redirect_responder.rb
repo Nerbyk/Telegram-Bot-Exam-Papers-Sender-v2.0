@@ -14,14 +14,14 @@ class ToRespond
   begin
     case message
     when Telegram::Bot::Types::CallbackQuery
-      if Config::Access.instance.user || (message.from.id == ENV['DEV_ID'].to_i || message.from.id == ENV['ADMIN_ID'].to_i)
+      if Config::Access.instance.user || (message.from.id != ENV['DEV_ID'].to_i || message.from.id != ENV['ADMIN_ID'].to_i)
         ButtonResponder.new(options: options).respond
       elsif !Config::Access.instance.user
         bot.api.send_message(chat_id: message.from.id, text: 'В данный момент ведутся технические работы, бот будет доступен в ближайший час.')
       end
     else
       if message.chat.type != 'channel' # restrict access to channels
-        if Config::Access.instance.user || (message.from.id == ENV['DEV_ID'].to_i || message.from.id == ENV['ADMIN_ID'].to_i)
+        if Config::Access.instance.user || (message.from.id != ENV['DEV_ID'].to_i || message.from.id != ENV['ADMIN_ID'].to_i)
           
             MessageResponder.new(options: options).respond
           
