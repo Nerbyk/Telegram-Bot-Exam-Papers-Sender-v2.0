@@ -161,7 +161,7 @@ class Form
   def acceptance_step_markup
     Db::User.instance.set_status(status: Config::Status::ISCORRECT, user_id: @user_id)
     markup = MakeInlineMarkup.new(['Отправить Заявку', Config::BotButtons::SEND_REQ],
-                                  ['Заполнить Заного', Config::BotButtons::RESET_REQ]).get_markup
+                                  ['Заполнить Заново', Config::BotButtons::RESET_REQ]).get_markup
     user_data = Db::UserMessage.instance.get_user_data(user_id: @user_id)
     photo = user_data[:photo].split(';').first
     user_info = 'Имя и Фамилия: ' + user_data[:name] + "\n" + 'Предметы: ' + user_data[:subjects].split(';').join(' ')
