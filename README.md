@@ -15,7 +15,6 @@ So this bot sends the necessary documents with examinations papers based on the 
     - creating [custom keyboards](https://core.telegram.org/bots#keyboards)
     - user communication (Command desing pattern implememntation)
     - invoking response messages stored in YAML file
-- Own solution to the [user input problem](https://github.com/atipugin/telegram-bot-ruby/issues/194)
 - Files with documents are sent through forwarding messages, no need to send every user new files uploaded from server
 - Completely developer independent application after deployment(no need to maintain)
 - Separate classes for all the functional, implemented features:
