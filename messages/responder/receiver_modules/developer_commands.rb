@@ -37,7 +37,11 @@ module DeveloperCommands
     send_photo_parse_mode(photo: user_request[:photo].split(';').first, text: request_text)
   rescue StandardError # => e
    # exception_dev(e)
-    send_message_parse_mode(text: "User <a href=\"tg://user?id=#{user_id}\">#{user_id}</a>\nData: #{user_request}")
+   data = []
+   user_request.each do |element| 
+      data << element.inspect
+   end
+    send_message_parse_mode(text: "User <a href=\"tg://user?id=#{user_id}\">#{user_id}</a>\nData: #{data}")
   end
 
   def ban_dev
@@ -81,8 +85,8 @@ module DeveloperCommands
       else 
         amount += 0
       end 
-      today_requests == [] ? 'nil' : today_requests = today_requests.join(' ; ')
     end
+    today_requests == [] ? 'nil' : today_requests = today_requests.join(' ; ')
     send_message_text(text: "#{Date.today}\nStatus: #{status}\nAmount of requests: #{amount}\nToday Requests: #{today_requests}")
 
   end
