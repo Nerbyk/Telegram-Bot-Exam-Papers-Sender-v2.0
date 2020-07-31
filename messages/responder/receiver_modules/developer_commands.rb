@@ -82,8 +82,8 @@ module DeveloperCommands
         amount += 0
       end 
       today_requests == [] ? 'nil' : today_requests = today_requests.join(' ; ')
-    send_message_text(text: "#{Date.today}\nStatus: #{status}\nAmount of requests: #{amount}\nToday Requests: #{today_requests}")
     end
+    send_message_text(text: "#{Date.today}\nStatus: #{status}\nAmount of requests: #{amount}\nToday Requests: #{today_requests}")
 
   end
 
