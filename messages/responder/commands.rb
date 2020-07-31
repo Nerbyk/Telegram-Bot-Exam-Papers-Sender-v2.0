@@ -164,3 +164,9 @@ class UploadPhotosCommand < Command
     request.upload_photos_dev
   end
 end
+
+class GetBotStatusCommand < Command 
+  def execute 
+    request.get_bot_status_dev
+  end
+end

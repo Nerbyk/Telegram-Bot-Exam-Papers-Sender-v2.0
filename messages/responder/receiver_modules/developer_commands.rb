@@ -69,6 +69,24 @@ module DeveloperCommands
     # end
   end
 
+  def get_bot_status_dev
+    status = Config::Access.instance.user
+    amount = 0
+    today_requests = []
+    requests = Db::UserMessage.instance.get_all_requests
+    requests.each do |row|
+      if row[:created] == Date.today 
+        amount += 1
+        today_requests << row[:user_id].to_s
+      else 
+        amount += 0
+      end 
+      today_requests == [] ? 'nil' : today_requests = today_requests.join(' ; ')
+    send_message_text(text: "#{Date.today}\nStatus: #{status}\nAmount of requests: #{amount}\nToday Requests: #{today_requests}")
+    end
+
+  end
+
   def exception_dev(e)
     send_message_text(text: "#{e.inspect}\n#{caller[0][/`.*'/][1..-2]}")
   rescue StandardError => e

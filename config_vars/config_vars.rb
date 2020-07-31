@@ -42,6 +42,7 @@ module Config
     BAN = '/ban '
     MESSAGE = '/send_message '
     UPLOAD_PHOTOS = '/upload_photos'
+    GET_BOT_STATUS = '/status'
   end
 
   class Roles
@@ -87,7 +88,7 @@ module Config
     include Singleton
     attr_accessor :user
     def initialize
-      @user = false
+      @user = true
     end
   end
 

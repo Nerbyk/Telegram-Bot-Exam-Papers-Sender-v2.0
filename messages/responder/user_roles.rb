@@ -92,7 +92,18 @@ class Developer < UserRole
       @invoker.execute(MessageDeveloeprCommand.new(@receiver))
     elsif @message.text.include?(Config::DevCommands::UPLOAD_PHOTOS)
       @invoker.execute(UploadPhotosCommand.new(@receiver))
+    elsif @message.text.include?(Config::DevCommands::GET_BOT_STATUS)
+      @invoker.execute(GetBotStatusCommand.new(@receiver))
+    elsif @options[:message].text == Config::BotCommands::INSPECT_NOST
+      @invoker.execute(InspectNostrCommand.new(@receiver))
+    elsif @options[:message].text == Config::BotCommands::AMOUNT
+      @invoker.execute(AmountCommand.new(@receiver))
     end
+
+    if @verification.split(' ').first == Config::AdminStatus::DENY_REASON
+      @invoker.execute(EnterRejectionReasonAction.new(@receiver))
+    end
+
   end
 end
 
