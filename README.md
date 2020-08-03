@@ -9,13 +9,12 @@ So this bot sends the necessary documents with examinations papers based on the 
 
 ## Features 
 - Data storing/automatic logging in SQL via ORM
-    - Several tables for storing config data which could be alter/expand during exploitation
+    - Several tables for storing config data which could be alter/extend during exploitation
 - Separated access levels (developer/admins/users)
 - Already created class for: 
     - creating [custom keyboards](https://core.telegram.org/bots#keyboards)
     - user communication (Command desing pattern implememntation)
     - invoking response messages stored in YAML file
-- Own solution to the [user input problem](https://github.com/atipugin/telegram-bot-ruby/issues/194)
 - Files with documents are sent through forwarding messages, no need to send every user new files uploaded from server
 - Completely developer independent application after deployment(no need to maintain)
 - Separate classes for all the functional, implemented features:
@@ -23,7 +22,11 @@ So this bot sends the necessary documents with examinations papers based on the 
     - KISS
     - DRY
     - GoF Design Patterns 
-
+## Services 
+- Notification for admin/moderator who inspects the request if user data (link/name+surname) matches with already accepted request. Generating telegra.ph article with matched request. 
+- Observer for number of uninspected requests 
+- Notification after bot restart
+- Sidekiq implementation to clean each week DB from empty rows
 ## User Panel 
 - Fill out a kind of a form/request to get specific documents. Form items:
     - Name Surname 
@@ -40,18 +43,11 @@ So this bot sends the necessary documents with examinations papers based on the 
 - Managing users requests
     - Accept
     - Deny + message with reason
-    - Ban + message with reason 
+    - Ban
 - Commands 
     - /start - call main menu 
     - /inspect - start checking users requests
     - /status - get a number of uninspected requests 
-- Commands extension for 'Admin'
-    - /manage_admins - manage a list of admins
-        - add new admin 
-        - delete admin 
-    - /update_documents - set new documents which would be send to users 
-    - /set_notification number - set a minimum number of uninspected requests  to get a notification message 
-    - /manage_links - change VK link and telegram channel link to check users membership
 ## Admin Panel
 - Commands(the same, as moderators have +)
      - /manage_admins - manage a list of admins
