@@ -64,6 +64,15 @@ class CheckUserInput
     false
   end
 
+  def self.check_courses(input:)
+    raise 'incorrect input format' if input.text == nil
+    raise 'user input is too long' if input.text.length > 255 
+    true 
+  rescue Exception => e  
+    to_log(level: inspect, exception: e, user_input: input)
+    false 
+  end
+
   def self.to_log(level:, exception:, user_input:)
     Db::ErrorLog.instance.log_error(level: level + '=>' + caller[0][/`.*'/][1..-2], message: user_input, exception: exception.inspect)
   end

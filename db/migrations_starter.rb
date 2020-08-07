@@ -1,7 +1,9 @@
 require 'sequel'
-require 'mysql2'
+# require 'mysql2'
+require 'sqlite3'
 Sequel.extension :migration
 
-DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'])
+DB = Sequel.sqlite('./user_config.db')
+# DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'])
 
-Sequel::Migrator.run(DB, './migrate', target: 3, current: 0)
+Sequel::Migrator.run(DB, './migrations', target: 5, current: 4)

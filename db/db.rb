@@ -2,7 +2,8 @@
 
 require 'singleton'
 require 'sequel'
-require 'mysql2'
+#require 'mysql2'
+require 'sqlite3'
 require 'time'
 
 module Db
@@ -247,6 +248,10 @@ module Db
       dataset.where(user_id: user_id).update(subjects: nil)
     end
 
+    def set_courses(user_id:, courses:)
+      dataset.where(user_id: user_id).update(courses: courses)
+    end
+
     def set_photo(user_id:, photo:)
       dataset.where(user_id: user_id).update(photo: photo)
     end
@@ -296,5 +301,6 @@ module Db
     attr_reader :dataset, :table
   end
 
-  DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'])
+  # DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'])
+  DB = Sequel.sqlite('./db/user_config.db')
 end

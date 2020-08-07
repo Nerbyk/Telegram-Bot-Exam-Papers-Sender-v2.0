@@ -57,6 +57,7 @@ module Config
     NAME        = 'name_step'
     LINK        = 'link_step'
     SUBJECTS    = 'subjects_step'
+    COURSES     = 'courses_step'
     PHOTO       = 'photo_step'
     IN_PROGRESS = 'in_queue'
     REVIEWING   = 'review'

@@ -14,7 +14,7 @@ module ModeratorCommands
     Db::User.instance.set_status(status: Config::Status::REVIEWING + ' ' + admin_name,
                                  user_id: inspectable_user_id)
     user_data = Db::UserMessage.instance.get_user_data(user_id: inspectable_user_id)
-    request_text = "\tЗаявка №#{inspectable_user_id}\nTG ID: <a href=\"tg://user?id=#{inspectable_user_id}\">#{inspectable_user_id}</a>\nИмя и Фамилия: #{user_data[:name]}\nСсылка ВК: #{user_data[:link]}\nПредметы: #{user_data[:subjects].gsub(';', ' ')}"
+    request_text = "\tЗаявка №#{inspectable_user_id}\nTG ID: <a href=\"tg://user?id=#{inspectable_user_id}\">#{inspectable_user_id}</a>\nИмя и Фамилия: #{user_data[:name]}\nСсылка ВК: #{user_data[:link]}\nПредметы: #{user_data[:subjects].gsub(';', ' ')}\nКурсы:#{user_data[:courses]}"
 
     matches_warning_text = "\n\n"
     matched_name, matched_link = ValidateUser.check_data_matches(data: user_data)

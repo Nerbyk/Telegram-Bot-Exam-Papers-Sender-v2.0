@@ -81,12 +81,28 @@ class Form
     else
       all_subjects = Db::UserMessage.instance.get_subjects(user_id: @user_id.to_s)
       if CheckUserInput.all_subjects(input: all_subjects)
-        photo_step_trigger
+        courses_step_trigger
       else
         send_message(text: 'get_user_info_subjects_error')
         Db::UserMessage.instance.del_subjects(user_id: @user_id)
       end
     end
+  end
+
+  def courses_step 
+    user_input = message 
+    if user_input.text == Config::BotCommands::STOP
+      return_to_mainmenu
+      return
+    end
+
+    if CheckUserInput.check_courses(input: user_input)
+      Db::UserMessage.instance.set_courses(user_id: @user_id, courses: user_input.text)
+      photo_step_trigger
+    else
+      send_message(text: 'get_user_courses_error')
+    end
+
   end
 
   def photo_step
@@ -150,6 +166,11 @@ class Form
     Db::User.instance.set_status(status: Config::Status::SUBJECTS, user_id: @user_id)
     markup = subject_keyboard
     send_message(text: 'get_user_info_subjects', markup: markup)
+  end
+
+  def courses_step_trigger 
+    Db::User.instance.set_status(status: Config::Status::COURSES, user_id: @user_id)
+    send_message(text: 'get_user_courses')
   end
 
   def photo_step_trigger
