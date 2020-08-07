@@ -31,6 +31,7 @@ module Config
     AMOUNT           = '/amount'
     USER_STATUS      = '/status'
     ADMIN_SETTING    = '/settings'
+    COURSES          = '/courses'
     REQ_IN_REVIEW    = "\n\nВашу заявку в данный момент рассматривает один из модераторов, вы получите ответ в считанные минуты"
   end
 

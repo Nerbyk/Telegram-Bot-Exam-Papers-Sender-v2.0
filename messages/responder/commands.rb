@@ -51,6 +51,12 @@ class SetAlertAmountCommand < Command
   end
 end
 
+class CoursesCommand < Command 
+  def execute
+    request.admin_courses
+  end
+end
+
 # Admin actions
 class AddAdminAction < Command
   def execute

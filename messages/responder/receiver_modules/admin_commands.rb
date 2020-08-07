@@ -24,4 +24,12 @@ module AdminCommands
   def settings
     send_message(text: 'settings')
   end
+
+  def admin_courses
+    data = Db::UserMessage.instance.get_courses.compact
+    data = data.map(&:downcase)
+    data = data.tally
+    display_string = data.map{|k,v| "#{k} - #{v}"}.join("\n")
+    send_message_text(text: "Статистика по курсам:\n#{display_string}")
+  end
 end

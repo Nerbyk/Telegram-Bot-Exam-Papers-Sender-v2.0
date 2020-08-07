@@ -285,6 +285,10 @@ module Db
       dataset.first(count)  
     end
 
+    def get_courses 
+      dataset.select_map(:courses)
+    end
+
     private
 
     def create

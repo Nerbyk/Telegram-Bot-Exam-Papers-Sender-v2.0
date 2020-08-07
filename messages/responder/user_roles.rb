@@ -58,6 +58,8 @@ class Admin < UserRole
         @invoker.execute(SettingsCommand.new(@receiver))
       elsif @options[:message].text == Config::BotCommands::AMOUNT
         @invoker.execute(AmountCommand.new(@receiver))
+      elsif @options[:message].text == Config::BotCommands::COURSES
+        @invoker.execute(CoursesCommand.new(@receiver))
       end
 
       case @verification
