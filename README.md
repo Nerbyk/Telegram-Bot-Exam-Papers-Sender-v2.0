@@ -56,3 +56,11 @@ So this bot sends the necessary documents with examinations papers based on the 
     - /update_documents - set new documents which would be send to users 
     - /set_notification number - set a minimum number of uninspected requests  to get a notification message 
     - /manage_links - change VK link and telegram channel link to check users membership
+    
+## Interface 
+<img src="https://i.imgur.com/nR0l5cA.png?1"
+     alt="Menu Demonstration"
+     style="float: left; width: 50%; height: auto;" />
+<img src="https://i.imgur.com/tsCadeu.png?1"
+     alt="Menu Demonstration"
+     style="float: left; margin-right: 10px;" />
