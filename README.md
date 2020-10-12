@@ -61,6 +61,6 @@ So this bot sends the necessary documents with examinations papers based on the 
 <img src="https://i.imgur.com/nR0l5cA.png?1"
      alt="Menu Demonstration"
      style="float: left; width: 50%; height: auto;" />
-<img src="https://i.imgur.com/tsCadeu.png?1"
+<img src="https://i.imgur.com/tsCadeu.png?2"
      alt="Menu Demonstration"
      style="float: left; margin-right: 10px;" />
